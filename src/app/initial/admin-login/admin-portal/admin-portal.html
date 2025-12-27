@@ -1,0 +1,265 @@
+<div class="admin-container">
+  <!-- Left Sidebar -->
+  <div class="sidebar" [class.closed]="!sidebarOpen">
+    <!-- Admin Profile -->
+    <div class="admin-profile">
+      <div class="profile-pic">
+        <img
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+          alt="Admin"
+        />
+      </div>
+      <div class="admin-info" *ngIf="sidebarOpen">
+        <h3>{{ adminName }}</h3>
+        <p>{{ adminPhone }}</p>
+        <p class="email">{{ adminEmail }}</p>
+      </div>
+    </div>
+
+    <!-- Menu List -->
+    <div class="menu-section" *ngIf="sidebarOpen">
+      <!-- Dashboard -->
+      <div
+        class="menu-item"
+        [class.active]="selectedMenu === 'dashboard'"
+        (click)="changeMenu('dashboard')"
+      >
+        <div class="menu-icon">
+          <span class="material-symbols-outlined">dashboard</span>
+        </div>
+        <span class="menu-text">Dashboard</span>
+      </div>
+
+      <!-- Manage Books with Dropdown -->
+      <div class="menu-group">
+        <div
+          class="menu-item"
+          [class.active]="selectedMenu === 'manage-books'"
+          (click)="toggleBooksDropdown()"
+        >
+          <div class="menu-icon">
+            <span class="material-symbols-outlined">library_books</span>
+          </div>
+          <span class="menu-text">Manage Books</span>
+          <!-- <span class="dropdown-arrow">
+            {{ booksDropdownOpen ? '▼' : '▶' }}
+          </span> -->
+        </div>
+
+        <!-- Books Dropdown -->
+        <div class="dropdown-menu" *ngIf="booksDropdownOpen">
+          <div
+            class="dropdown-item"
+            *ngFor="let subMenu of menus[0].subMenus"
+            [class.active]="selectedSubMenu === subMenu.name"
+            (click)="selectSubMenu(subMenu.name)"
+          >
+            <span class="sub-icon">•</span>
+            <span>{{ subMenu.title }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manage Users with Dropdown -->
+      <div class="menu-group">
+        <div
+          class="menu-item"
+          [class.active]="selectedMenu === 'manage-users'"
+          (click)="toggleUsersDropdown()"
+        >
+          <div class="menu-icon">
+            <span class="material-symbols-outlined">group</span>
+          </div>
+          <span class="menu-text">Manage Users</span>
+          <span class="dropdown-arrow">
+            {{ usersDropdownOpen ? '▼' : '▶' }}
+          </span>
+        </div>
+
+        <!-- Users Dropdown -->
+        <div class="dropdown-menu" *ngIf="usersDropdownOpen">
+          <div
+            class="dropdown-item"
+            *ngFor="let subMenu of menus[1].subMenus"
+            [class.active]="selectedSubMenu === subMenu.name"
+            (click)="selectSubMenu(subMenu.name)"
+          >
+            <span class="sub-icon">•</span>
+            <span>{{ subMenu.title }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other Menu Items (No Dropdown) -->
+      <div
+        class="menu-item"
+        *ngFor="let menu of menus.slice(2)"
+        [class.active]="selectedMenu === menu.name"
+        (click)="changeMenu(menu.name)"
+      >
+        <!-- Simple icons for each menu -->
+        <div class="menu-icon">
+          <span *ngIf="menu.name === 'history'" class="material-symbols-outlined">history</span>
+          <span *ngIf="menu.name === 'reports'" class="material-symbols-outlined">analytics</span>
+          <span *ngIf="menu.name === 'settings'" class="material-symbols-outlined">settings</span>
+        </div>
+
+        <span class="menu-text">{{ menu.title }}</span>
+      </div>
+
+      <!-- Logout Button -->
+      <div class="menu-item logout-item" (click)="logout()">
+        <div class="menu-icon">
+          <span class="material-symbols-outlined">logout</span>
+        </div>
+        <span class="menu-text">Logout</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-area" [class.sidebar-closed]="!sidebarOpen">
+    <!-- Top Header -->
+    <div class="top-bar">
+      <div class="left-section">
+        <button class="menu-toggle" (click)="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <h1>{{ getCurrentTitle() }}</h1>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-section">
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Search..."
+            [(ngModel)]="searchText"
+            (keyup.enter)="doSearch()"
+            class="search-input"
+          />
+          <button *ngIf="searchText" class="clear-btn" (click)="clearSearch()">✕</button>
+        </div>
+        <button class="search-button" (click)="doSearch()">
+          <span class="material-symbols-outlined">search</span>
+        </button>
+      </div>
+
+      <button class="home-icon-btn" (click)="goHome()">
+        <span class="material-symbols-outlined">home</span>
+      </button>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+      <!-- Dashboard Page -->
+      <div *ngIf="selectedMenu === 'dashboard'" class="page">
+        <h2>Dashboard</h2>
+        <p>Overview of all library functions and statistics.</p>
+        <div class="dashboard-grid">
+          <div class="dashboard-card" (click)="changeMenu('manage-books')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">library_books</span>
+            </div>
+            <h3>Manage Books</h3>
+            <p>Add, update, delete, and view books</p>
+          </div>
+          <div class="dashboard-card" (click)="changeMenu('manage-users')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">group</span>
+            </div>
+            <h3>Manage Users</h3>
+            <p>Add, update, delete, and view users</p>
+          </div>
+          <div class="dashboard-card" (click)="changeMenu('history')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">history</span>
+            </div>
+            <h3>History</h3>
+            <p>View transaction history</p>
+          </div>
+          <div class="dashboard-card" (click)="changeMenu('reports')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">analytics</span>
+            </div>
+            <h3>Reports</h3>
+            <p>Generate and view reports</p>
+          </div>
+          <div class="dashboard-card" (click)="changeMenu('settings')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">settings</span>
+            </div>
+            <h3>Settings</h3>
+            <p>Configure system settings</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manage Books Pages -->
+      <div *ngIf="selectedMenu === 'manage-books'" class="page">
+        <!-- Single component that includes Add + View + Inline Edit + Delete -->
+        <app-manage-books></app-manage-books>
+      </div>
+
+      <!-- Manage Users Pages -->
+      <div *ngIf="selectedMenu === 'manage-users'" class="page">
+        <!-- Add Users -->
+        <div *ngIf="selectedSubMenu === 'users-add'">
+          <h2>Add Users</h2>
+          <p>Register new library users.</p>
+        </div>
+
+        <!-- Update Users -->
+        <div *ngIf="selectedSubMenu === 'users-update'">
+          <h2>Update Users</h2>
+          <p>Modify user information and settings.</p>
+        </div>
+
+        <!-- Delete Users -->
+        <div *ngIf="selectedSubMenu === 'users-delete'">
+          <h2>Delete Users</h2>
+          <p>Remove users from the system.</p>
+        </div>
+
+        <!-- View Users -->
+        <div *ngIf="selectedSubMenu === 'users-read'">
+          <h2>View Users</h2>
+          <p>Browse and manage library users.</p>
+        </div>
+      </div>
+
+      <!-- History Page -->
+      <div *ngIf="selectedMenu === 'history'" class="page">
+        <h2>History</h2>
+        <p>View transaction and activity history.</p>
+        <div class="simple-card">
+          <h4>Recent Transactions: 25</h4>
+          <p>Books issued: 15</p>
+          <p>Books returned: 10</p>
+        </div>
+      </div>
+
+      <!-- Reports Page -->
+      <div *ngIf="selectedMenu === 'reports'" class="page">
+        <h2>Reports</h2>
+        <p>View library statistics and reports.</p>
+        <div class="simple-card">
+          <h4>Monthly Report</h4>
+          <p>Books borrowed: 1,200</p>
+          <p>New users: 45</p>
+        </div>
+      </div>
+
+      <!-- Settings Page -->
+      <div *ngIf="selectedMenu === 'settings'" class="page">
+        <h2>Settings</h2>
+        <p>Configure library system settings.</p>
+        <div class="simple-card">
+          <h4>System Settings</h4>
+          <p>Library Hours: 9 AM - 6 PM</p>
+          <p>Max Books per User: 5</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

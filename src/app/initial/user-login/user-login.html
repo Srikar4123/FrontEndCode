@@ -1,0 +1,195 @@
+<div class="split-container">
+  <!-- Left Side - Image Slideshow -->
+  <div class="image-section">
+    <div class="image-slider">
+      <div class="slide" 
+           *ngFor="let image of images; let i = index" 
+           [class.active]="i === currentImageIndex">
+        <img [src]="image.url" [alt]="image.alt">
+        <div class="slide-overlay">
+          <h3>{{ image.title }}</h3>
+          <p>{{ image.description }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Slider Dots -->
+    <div class="slider-dots">
+      <span *ngFor="let image of images; let i = index" 
+            [class.active]="i === currentImageIndex"
+            (click)="goToSlide(i)"
+            class="dot"></span>
+    </div>
+  </div>
+
+  <!-- Right Side - Login Form -->
+  <div class="form-section">
+    <!-- Back Button -->
+    <button class="back-btn" (click)="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <div class="form-container">
+      <!-- Header -->
+      <div class="form-header">
+        <h1>User Portal</h1>
+        <p *ngIf="isExistingUser">Welcome back! Please sign in to your account</p>
+        <p *ngIf="!isExistingUser">Create your user account to get started</p>
+      </div>
+
+      <!-- Mode Toggle -->
+      <div class="mode-toggle">
+        <button 
+          [class.active]="isExistingUser" 
+          (click)="toggleMode()"
+          class="toggle-btn">
+          Sign In
+        </button>
+        <button 
+          [class.active]="!isExistingUser" 
+          (click)="toggleMode()"
+          class="toggle-btn">
+          Sign Up
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <form *ngIf="isExistingUser" (ngSubmit)="login()" class="auth-form">
+        <div class="form-group">
+          <input 
+            type="email" 
+            id="email" 
+            [(ngModel)]="email" 
+            name="email" 
+            placeholder="Email address"
+            required>
+        </div>
+        
+        <div class="form-group">
+          <div class="password-input">
+            <input 
+              [type]="showPassword ? 'text' : 'password'"
+              id="password" 
+              [(ngModel)]="password" 
+              name="password" 
+              placeholder="Password"
+              required>
+            <button type="button" class="show-password-btn" (click)="togglePasswordVisibility()">
+              <svg *ngIf="!showPassword" viewBox="0 0 24 24" fill="none">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+              <svg *ngIf="showPassword" viewBox="0 0 24 24" fill="none">
+                <path d="m1 1 22 22" stroke="currentColor" stroke-width="2"/>
+                <path d="M6.71 6.71C4.68 8.04 3 10.5 3 12s1.68 3.96 3.71 5.29" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="m17.29 17.29C19.32 15.96 21 13.5 21 12s-1.68-3.96-3.71-5.29" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+        
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+
+      <!-- Registration Form -->
+      <form *ngIf="!isExistingUser" (ngSubmit)="register()" class="auth-form">
+        <div class="form-group">
+          <input 
+            type="text" 
+            id="newName" 
+            [(ngModel)]="newName" 
+            name="newName" 
+            placeholder="Full Name"
+            required>
+        </div>
+        
+        <div class="form-group">
+          <input 
+            type="email" 
+            id="newEmail" 
+            [(ngModel)]="newEmail" 
+            name="newEmail" 
+            placeholder="Email address"
+            required>
+        </div>
+        
+        <div class="form-group">
+          <div class="phone-input">
+            <span class="country-code">+91</span>
+            <input 
+              type="tel" 
+              id="contactNumber" 
+              [(ngModel)]="contactNumber" 
+              name="contactNumber" 
+              placeholder="Contact Number"
+              maxlength="10"
+              (input)="formatPhoneNumber()"
+              required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="password-input">
+            <input 
+              [type]="showNewPassword ? 'text' : 'password'"
+              id="newPassword" 
+              [(ngModel)]="newPassword" 
+              name="newPassword" 
+              placeholder="Password"
+              required>
+            <button type="button" class="show-password-btn" (click)="toggleNewPasswordVisibility()">
+              <svg *ngIf="!showNewPassword" viewBox="0 0 24 24" fill="none">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+              <svg *ngIf="showNewPassword" viewBox="0 0 24 24" fill="none">
+                <path d="m1 1 22 22" stroke="currentColor" stroke-width="2"/>
+                <path d="M6.71 6.71C4.68 8.04 3 10.5 3 12s1.68 3.96 3.71 5.29" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="m17.29 17.29C19.32 15.96 21 13.5 21 12s-1.68-3.96-3.71-5.29" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="password-input">
+            <input 
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              id="confirmPassword" 
+              [(ngModel)]="confirmPassword" 
+              name="confirmPassword" 
+              placeholder="Confirm Password"
+              required>
+            <button type="button" class="show-password-btn" (click)="toggleConfirmPasswordVisibility()">
+              <svg *ngIf="!showConfirmPassword" viewBox="0 0 24 24" fill="none">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+              <svg *ngIf="showConfirmPassword" viewBox="0 0 24 24" fill="none">
+                <path d="m1 1 22 22" stroke="currentColor" stroke-width="2"/>
+                <path d="M6.71 6.71C4.68 8.04 3 10.5 3 12s1.68 3.96 3.71 5.29" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="m17.29 17.29C19.32 15.96 21 13.5 21 12s-1.68-3.96-3.71-5.29" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+        
+        <div class="success-message" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+        
+        <button type="submit" class="login-btn">Create Account</button>
+      </form>
+    </div>
+  </div>
+</div>
