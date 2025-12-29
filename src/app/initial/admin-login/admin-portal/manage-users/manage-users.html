@@ -1,0 +1,326 @@
+<section class="container">
+  <header class="toolbar">
+    <label>
+      Role:
+      <select [(ngModel)]="roleFilter">
+        <option value="">(All)</option>
+        <!-- You can use enum or numeric; keeping numeric to match your code -->
+        <option [ngValue]="0">User</option>
+        <option [ngValue]="1">Admin</option>
+      </select>
+    </label>
+
+    <label>
+      Search:
+      <input
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="load()"
+        placeholder="username / email / phone"
+      />
+    </label>
+
+    <button (click)="load()">Refresh</button>
+    <button class="primary" (click)="openCreateModalDialog()">Create Account</button>
+  </header>
+
+  <div class="status" *ngIf="loading">Loading...</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <!-- List -->
+  <ng-container *ngIf="accounts$ | async as accounts">
+    <table class="grid" *ngIf="accounts.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User Name</th>
+          <th>Email</th>
+          <th>Password</th>
+          <th>Phone</th>
+          <th>Role</th>
+          <th>Active?</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let acc of accounts; trackBy: trackById">
+          <td>{{ acc.id }}</td>
+
+          <td>
+            <ng-container *ngIf="editId !== acc.id; else editUserName">
+              {{ acc.userName }}
+            </ng-container>
+            <ng-template #editUserName>
+              <input [(ngModel)]="editModel.userName" />
+            </ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="editId !== acc.id; else editEmail">
+              {{ acc.email }}
+            </ng-container>
+            <ng-template #editEmail>
+              <input [(ngModel)]="editModel.email" type="email" />
+            </ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="editId !== acc.id; else editPassword"> •••••••• </ng-container>
+            <ng-template #editPassword>
+              <input [(ngModel)]="editModel.password" type="password" />
+            </ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="editId !== acc.id; else editPhone">
+              {{ acc.phoneNumber }}
+            </ng-container>
+            <ng-template #editPhone>
+              <input [(ngModel)]="editModel.phoneNumber" />
+            </ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="editId !== acc.id; else editRole">
+              {{ roleLabel(acc.role) }}
+            </ng-container>
+            <ng-template #editRole>
+              <select [(ngModel)]="editModel.role">
+                <option [ngValue]="0">User</option>
+                <option [ngValue]="1">Admin</option>
+              </select>
+            </ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="editId !== acc.id; else editActive">
+              {{ acc.isActive ? 'Yes' : 'No' }}
+            </ng-container>
+            <ng-template #editActive>
+              <label class="inline">
+                <input type="checkbox" [(ngModel)]="editModel.isActive" />
+                Active
+              </label>
+            </ng-template>
+          </td>
+
+          <!-- createdAt might be string or Date; guard with safe pipe -->
+          <td>
+            <ng-container *ngIf="acc.createdAt as created">
+              {{ created | date : 'yyyy-MM-dd HH:mm' }}
+            </ng-container>
+          </td>
+
+          <td class="actions">
+            <!-- Loans link to details page -->
+            <a
+              class="link"
+              [routerLink]="['/admin/users', acc.id, 'loans']"
+              [queryParams]="{ userName: acc.userName }"
+              >Loans</a
+            >
+
+            <button *ngIf="editId !== acc.id" (click)="startEdit(acc)">Edit</button>
+            <button *ngIf="editId === acc.id" (click)="saveEdit(acc.id)">Save</button>
+            <button *ngIf="editId === acc.id" (click)="cancelEdit()">Cancel</button>
+
+            <button
+              *ngIf="acc.isActive"
+              class="icon-btn"
+              (click)="deactivate(acc.id)"
+              aria-label="Deactivate"
+            >
+              <span class="material-symbols-outlined deactivate">person_off</span>
+            </button>
+
+            <button
+              *ngIf="!acc.isActive"
+              class="icon-btn"
+              (click)="activate(acc.id)"
+              aria-label="Activate"
+            >
+              <span class="material-symbols-outlined activate">person</span>
+            </button>
+
+            <button class="danger" (click)="remove(acc.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div *ngIf="!loading" class="empty">No accounts found.</div>
+    </ng-template>
+  </ng-container>
+
+  <!-- Modal: Create Account -->
+  <!-- <div class="modal-backdrop" *ngIf="createOpen" (click)="closeCreateModal()"></div> -->
+  <!-- <div class="modal" *ngIf="createOpen" role="dialog" aria-modal="true">
+    <header class="modal-header">
+      <h3>Create Account</h3>
+      <button class="icon" (click)="closeCreateModal()" aria-label="Close">✖</button>
+    </header>
+
+    <form (ngSubmit)="confirmCreate()" #createForm="ngForm" class="modal-body">
+      <div class="row">
+        <label>
+          User Name
+          <input [(ngModel)]="createModel.userName" name="userName" required />
+        </label>
+
+        <label>
+          Email
+          <input [(ngModel)]="createModel.email" name="email" type="email" required />
+        </label>
+
+        <label>
+          Password
+          <input [(ngModel)]="createModel.password" name="password" type="password" required />
+        </label>
+
+        <label>
+          Phone
+          <input [(ngModel)]="createModel.phoneNumber" name="phoneNumber" required />
+        </label>
+
+        <label>
+          Role
+          <select [(ngModel)]="createModel.role" name="role" required>
+            <option [ngValue]="0">User</option>
+            <option [ngValue]="1">Admin</option>
+          </select>
+        </label>
+
+        <label class="inline">
+          <input type="checkbox" [(ngModel)]="createModel.isActive" name="isActive" />
+          Active (optional; default true if omitted)
+        </label>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" (click)="closeCreateModal()">Cancel</button>
+        <button type="submit" [disabled]="!createForm.form.valid || creating" class="primary">
+          Create
+        </button>
+        <span *ngIf="creating">Saving...</span>
+      </footer>
+    </form>
+  </div> -->
+
+  <dialog
+    #createDialog
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="createTitle"
+    class="dialog"
+  >
+    <!-- IMPORTANT: remove method="dialog" -->
+    <form (ngSubmit)="confirmCreate()" #createForm="ngForm" class="dialog-form">
+      <header class="modal-header">
+        <h3 id="createTitle">Create Account</h3>
+        <button type="button" class="icon" (click)="closeCreateModalDialog()" aria-label="Close">
+          ✖
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <div class="row">
+          <label>
+            User Name
+            <input [(ngModel)]="createModel.userName" name="userName" required />
+          </label>
+
+          <label>
+            Email
+            <input [(ngModel)]="createModel.email" name="email" type="email" required />
+          </label>
+
+          <label>
+            Password
+            <input [(ngModel)]="createModel.password" name="password" type="password" required />
+          </label>
+
+          <label>
+            Phone
+            <input [(ngModel)]="createModel.phoneNumber" name="phoneNumber" required />
+          </label>
+
+          <label>
+            Role
+            <select [(ngModel)]="createModel.role" name="role" required>
+              <option [ngValue]="0">User</option>
+              <option [ngValue]="1">Admin</option>
+            </select>
+          </label>
+
+          <label class="inline">
+            <input type="checkbox" [(ngModel)]="createModel.isActive" name="isActive" />
+            Active (optional; default true if omitted)
+          </label>
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" (click)="closeCreateModalDialog()">Cancel</button>
+        <button type="submit" [disabled]="!createForm.form.valid || creating" class="primary">
+          Create
+        </button>
+        <span *ngIf="creating">Saving...</span>
+      </footer>
+    </form>
+  </dialog>
+
+  <style>
+    /* Center the dialog */
+    dialog.dialog {
+      border: none;
+      border-radius: 8px;
+      padding: 0;
+      width: min(90vw, 640px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+
+      /* Center positioning */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header,
+    .modal-footer {
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+    }
+    .modal-footer {
+      border-top: 1px solid #eee;
+      border-bottom: none;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .modal-body {
+      padding: 16px;
+    }
+    .icon {
+      margin-left: auto;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .row label {
+      display: grid;
+      gap: 6px;
+    }
+    .inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
+</section>

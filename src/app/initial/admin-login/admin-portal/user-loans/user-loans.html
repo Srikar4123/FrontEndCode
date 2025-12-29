@@ -1,0 +1,68 @@
+<section class="container">
+  <header class="toolbar">
+    <button (click)="backToUsers()">&larr; Back to Users</button>
+    <h3 class="title">Loans & Fines — {{ displayName() }} (ID #{{ userId }})</h3>
+  </header>
+
+  <div class="error" *ngIf="userError">{{ userError }}</div>
+  <div class="status" *ngIf="userLoading">Loading user…</div>
+
+  <section class="header-card" *ngIf="user">
+    <div><strong>Role:</strong> {{ roleLabel(user.role) }}</div>
+    <div><strong>Active:</strong> {{ user.isActive ? 'Yes' : 'No' }}</div>
+    <div><strong>Email:</strong> {{ user.email }}</div>
+    <div><strong>Phone:</strong> {{ user.phoneNumber }}</div>
+    <div><strong>Created:</strong> {{ user.createdAt | date : 'yyyy-MM-dd HH:mm' }}</div>
+  </section>
+
+  <section class="stats-card">
+    <div>
+      Active Loans: <strong>{{ activeLoans }}</strong>
+    </div>
+    <div>
+      Can Borrow: <strong>{{ canBorrow ? 'Yes' : 'No' }}</strong>
+    </div>
+    <div>
+      Outstanding: <strong>{{ totalOutstanding | currency : 'USD' : 'symbol-narrow' }}</strong>
+    </div>
+  </section>
+
+  <div class="error" *ngIf="loansError">{{ loansError }}</div>
+  <div class="status" *ngIf="loansLoading">Loading loans…</div>
+
+  <table class="grid" *ngIf="loans.length > 0">
+    <thead>
+      <tr>
+        <th>Loan #</th>
+        <th>Book</th>
+        <th>Issue</th>
+        <th>Due</th>
+        <th>Returned</th>
+        <th>Fine</th>
+        <th>Paid?</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let l of loans">
+        <td>{{ l.id }}</td>
+        <td>{{ l.title || 'Book #' + l.bookId }}</td>
+        <td>{{ l.issueDate | date : 'yyyy-MM-dd' }}</td>
+        <td [class.overdue]="isOverdue(l)">{{ l.dueDate | date : 'yyyy-MM-dd' }}</td>
+        <td>{{ l.returnDate ? (l.returnDate | date : 'yyyy-MM-dd') : '—' }}</td>
+        <td>{{ l.fineAmount | currency : 'INR' : 'symbol-narrow' }}</td>
+        <td>{{ l.paymentStatus ? 'Yes' : 'No' }}</td>
+        <td>
+          <span class="badge" *ngFor="let s of statusLabels(l)">{{ s }}</span>
+        </td>
+        <td class="actions">
+          <button *ngIf="isActiveLoan(l)" (click)="returnLoan(l)">Return</button>
+          <button *ngIf="isUnpaid(l)" class="primary" (click)="payFine(l)">Pay Fine</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="loans.length === 0 && !loansLoading" class="empty">No loans found for this user.</div>
+</section>

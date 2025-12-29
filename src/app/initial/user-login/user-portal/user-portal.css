@@ -1,0 +1,486 @@
+/* Professional CSS for User Portal with Sober Colors */
+
+/* Main container */
+.user-container {
+  display: flex;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Left sidebar */
+.sidebar {
+  width: 280px;
+  background: #34495e;
+  color: white;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.closed {
+  width: 0;
+  overflow: hidden;
+}
+
+/* User profile section */
+.user-profile {
+  padding: 30px 25px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.profile-pic img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.profile-pic img:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
+}
+
+.user-info h3 {
+  margin: 15px 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.user-info p {
+  margin: 4px 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.user-info .email {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Menu section */
+.menu-section {
+  padding: 25px 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 16px 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0 25px 25px 0;
+  margin: 2px 15px 2px 0;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.menu-item.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 4px solid #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.menu-icon {
+  font-size: 22px;
+  margin-right: 18px;
+  width: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+}
+
+.menu-icon .material-symbols-outlined {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.menu-item:hover .menu-icon {
+  transform: scale(1.1);
+}
+
+.menu-text {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.logout-item {
+  margin-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 25px;
+}
+
+.logout-item:hover {
+  background: rgba(220, 53, 69, 0.2);
+}
+
+/* Dropdown Menu Styles */
+.menu-group {
+  margin-bottom: 8px;
+}
+
+.dropdown-arrow {
+  margin-left: auto;
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-menu {
+  background: rgba(0, 0, 0, 0.2);
+  margin: 8px 0 0 25px;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0 15px 15px 0;
+  animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border-radius: 0 12px 12px 0;
+  margin: 2px 0;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(3px);
+}
+
+.dropdown-item.active {
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+}
+
+.sub-icon {
+  margin-right: 12px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Animation for dropdown */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
+    transform: translateY(0);
+  }
+}
+
+/* Main content area */
+.main-area {
+  flex: 1;
+  background: #f8f9fa;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-area.sidebar-closed {
+  margin-left: 0;
+}
+
+/* Top header bar */
+.top-bar {
+  background: white;
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e9ecef;
+  gap: 25px;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-toggle {
+  background: #495057;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+.menu-toggle:hover {
+  background: #343a40;
+  transform: translateY(-2px);
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #34495e;
+}
+
+/* Search Bar Styles */
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 8px 15px;
+  flex: 1;
+}
+
+.search-input {
+  border: none;
+  background: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+  color: #495057;
+}
+
+.search-input::placeholder {
+  color: #6c757d;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 5px;
+  margin-left: 5px;
+}
+
+.clear-btn:hover {
+  color: #495057;
+}
+
+.search-button {
+  background: #495057;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-button:hover {
+  background: #343a40;
+}
+
+/* Home Button */
+.home-icon-btn {
+  background: #6c757d;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 20px;
+}
+
+.home-icon-btn:hover {
+  background: #495057;
+  transform: translateY(-2px);
+}
+
+/* Content area */
+.content {
+  padding: 30px;
+  min-height: calc(100vh - 100px);
+}
+
+.page {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.page h2 {
+  margin: 0 0 15px 0;
+  color: #34495e;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.page p {
+  color: #6c757d;
+  margin-bottom: 25px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  border-color: #34495e;
+}
+
+.dashboard-card .card-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: block;
+  color: #34495e;
+  font-weight: bold;
+}
+
+.dashboard-card .card-icon .material-symbols-outlined {
+  font-size: 48px;
+  color: #34495e;
+}
+
+.dashboard-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 10px;
+}
+
+.dashboard-card p {
+  color: #6c757d;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Simple card for displaying info */
+.simple-card {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  border-left: 4px solid #34495e;
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.simple-card h4 {
+  margin: 0 0 15px 0;
+  color: #34495e;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.simple-card p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    z-index: 1000;
+    height: 100vh;
+    transform: translateX(-100%);
+  }
+  
+  .sidebar:not(.closed) {
+    transform: translateX(0);
+    width: 280px;
+  }
+  
+  .main-area {
+    margin-left: 0;
+  }
+  
+  .top-bar {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .left-section {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .search-section {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar h1 {
+    font-size: 20px;
+  }
+  
+  .page {
+    padding: 20px;
+  }
+  
+  .page h2 {
+    font-size: 24px;
+  }
+
+  .dashboard-card {
+    padding: 20px;
+  }
+
+  .dashboard-card .card-icon {
+    font-size: 36px;
+  }
+}

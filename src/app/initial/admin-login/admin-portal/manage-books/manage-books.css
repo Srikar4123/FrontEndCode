@@ -1,0 +1,154 @@
+:host {
+    display: block;
+}
+
+.page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.filters {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.filters input,
+.filters select {
+    padding: 6px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+.plus-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0a84ff;
+    color: white;
+    border: none;
+    border-radius: 24px;
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+.plus-btn .plus {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 18px;
+}
+
+.plus-btn .label {
+    font-weight: 500;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.grid .full {
+    grid-column: 1 / -1;
+}
+
+.grid input,
+.grid textarea,
+select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.error {
+    color: #b91c1c;
+    font-size: 12px;
+}
+
+.form-errors {
+    color: #b91c1c;
+    margin-top: 8px;
+}
+
+.actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+}
+
+button.primary {
+    background: #0a84ff;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button.secondary {
+    background: #10b981;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button.danger {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button.ghost {
+    background: transparent;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border-top: 1px solid #e5e7eb;
+    padding: 8px;
+    text-align: left;
+}
+
+.table thead th {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.edit-row {
+    background: #f9fafb;
+}

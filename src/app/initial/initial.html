@@ -1,0 +1,174 @@
+<div class="init-cont">
+  <!-- Welcome Section -->
+  <section class="welcome-section">
+    <div class="main-container-box">
+      <!-- Library Icon Section -->
+      <div class="library-section">
+        <div class="library-icon-wrapper">
+          <svg
+            class="library-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M4 6H2V20C2 21.1 2.9 22 4 22H18V20H4V6Z" fill="currentColor" />
+            <path
+              d="M20 2H8C6.9 2 6 2.9 6 4V16C6 17.1 6.9 18 8 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H8V4H20V16Z"
+              fill="currentColor"
+            />
+            <path
+              d="M12 5H10V7H12V5ZM14 5H16V7H14V5ZM10 8H12V10H10V8ZM14 8H16V10H14V8ZM10 11H12V13H10V11ZM14 11H16V13H14V11Z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+        <h1>Library Management System</h1>
+        <p class="subtitle">Your Gateway to Knowledge and Learning</p>
+      </div>
+
+      <!-- About Us Section -->
+      <div class="about-us-container">
+        <h2>About Us</h2>
+        <p>
+          Welcome to our comprehensive Library Management System, designed to streamline library
+          operations and enhance user experience. Our platform provides efficient book cataloging,
+          user management, and seamless borrowing processes.
+        </p>
+        <p>
+          Built with modern technology and user-centric design, we aim to bridge the gap between
+          traditional library services and digital innovation, making knowledge more accessible to
+          everyone.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Login Section -->
+  <section class="login-section">
+    <div class="login-container-box">
+      <h2>Choose Your Portal</h2>
+      <p class="login-subtitle">Select your role to access the system</p>
+
+      <!-- Icon Buttons Section -->
+      <div class="icon-buttons-container">
+        <!-- User Login Button -->
+        <div class="icon-button-wrapper">
+          <button class="icon-button user-button" (click)="goToUserLogin()">
+            <svg
+              class="button-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
+                fill="currentColor"
+              />
+              <path
+                d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <span class="button-label">User Login</span>
+        </div>
+
+        <!-- Admin Login Button -->
+        <div class="icon-button-wrapper">
+          <button class="icon-button admin-button" (click)="goToAdminLogin()">
+            <svg
+              class="button-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM12 7C13.1 7 14 7.9 14 9S13.1 11 12 11 10 10.1 10 9 10.9 7 12 7ZM12 17C10.33 17 8.94 16.16 8.24 14.96C8.26 13.71 10.5 13.5 12 13.5S15.74 13.71 15.76 14.96C15.06 16.16 13.67 17 12 17Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <span class="button-label">Admin Login</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="team-section">
+    <div class="team-container">
+      <h2>Our Team</h2>
+      <div class="team-cards-container">
+        <!-- Srikar Card -->
+        <div class="team-card">
+          <div class="team-card-image">
+            <!-- <img
+              src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/799ff69626814366d8f30d0a13a522d9cf4cb8bd/Srikar_Symplr.jpg"
+              alt="Srikar"
+            /> -->
+            <img
+              src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/main/IMG-20251226-WA0086~2.jpg"
+              alt="Srikar"
+            />
+          </div>
+          <div class="team-card-overlay">
+            <div class="team-card-content">
+              <h3>Srikar P S</h3>
+              <p>Software Developer Trainee</p>
+              <!-- <span class="team-description">Expert in building robust backend systems and ensuring seamless data management for optimal library operations.</span> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Kavya Card -->
+        <div class="team-card">
+          <div class="team-card-image">
+            <img
+              src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/799ff69626814366d8f30d0a13a522d9cf4cb8bd/Kavya_Symplr.jpg"
+              alt="Kavya"
+            />
+          </div>
+          <div class="team-card-overlay">
+            <div class="team-card-content">
+              <h3>Kavya Manne</h3>
+              <p>Software Developer Trainee</p>
+              <!-- <span class="team-description">Dedicated to crafting beautiful and intuitive user experiences that make library management effortless and enjoyable.</span> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Aman Card -->
+        <div class="team-card">
+          <div class="team-card-image">
+            <img
+              src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/799ff69626814366d8f30d0a13a522d9cf4cb8bd/Aman_Symplr.jpg"
+              alt="Aman"
+            />
+          </div>
+          <div class="team-card-overlay">
+            <div class="team-card-content">
+              <h3>Aman Maan</h3>
+              <p>Software Developer Trainee</p>
+              <!-- <span class="team-description">Passionate about creating innovative solutions and leading the technical development of our library management system.</span> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Footer Section -->
+<footer class="footer-container">
+  <div class="footer-content">
+    <div class="footer-left">
+      <p>&copy; 2024 Library Management System. All rights reserved.</p>
+    </div>
+    <div class="footer-center">
+      <p>Contact Us: maan.amanmaan@gmail.com</p>
+    </div>
+    <div class="footer-right">
+      <p>Team: Aman, Kavya & Srikar</p>
+    </div>
+  </div>
+</footer>

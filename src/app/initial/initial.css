@@ -1,0 +1,688 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.init-cont {
+    background: 
+        /* Aurora lights overlay */
+        radial-gradient(ellipse at 20% 30%, rgba(0, 255, 127, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(50, 205, 50, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 40% 40%, rgba(144, 238, 144, 0.2) 0%, transparent 70%),
+        radial-gradient(ellipse at 70% 60%, rgba(255, 20, 147, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 30% 80%, rgba(138, 43, 226, 0.15) 0%, transparent 60%),
+        /* Starry night sky base */
+        linear-gradient(180deg, 
+            #1a0b2e 0%,     /* deep purple-black at top */
+            #2d1b4e 30%,    /* dark purple */
+            #16213e 60%,    /* dark blue-purple */
+            #0f0f23 100%);  /* very dark purple-black at bottom */
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+}
+
+.init-cont::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        /* Scattered stars */
+        radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #fff, transparent),
+        radial-gradient(1px 1px at 200px 90px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 240px 50px, #fff, transparent),
+        radial-gradient(2px 2px at 280px 20px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 320px 70px, #fff, transparent);
+    background-repeat: repeat;
+    background-size: 350px 100px;
+    animation: twinkle 4s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Section Styles */
+section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Welcome Section */
+.welcome-section {
+    padding-top: 60px;
+}
+
+.main-container-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 60px 50px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Library Icon Section */
+.library-section {
+    margin-bottom: 50px;
+}
+
+.library-icon-wrapper {
+    display: inline-block;
+    margin-bottom: 30px;
+    padding: 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+}
+
+.library-icon {
+    width: 80px;
+    height: 80px;
+    color: white;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #00ff7f 0%, #32cd32 50%, #ff69b4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(0, 255, 127, 0.3);
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #e2e8f0;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* About Us Section in Welcome */
+.about-us-container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px 35px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    margin-top: 30px;
+}
+
+.about-us-container h2 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #00ff7f 0%, #32cd32 50%, #ff69b4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 15px rgba(0, 255, 127, 0.2);
+    text-align: center;
+}
+
+.about-us-container p {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.about-us-container p:last-child {
+    margin-bottom: 0;
+}
+
+/* Login Section */
+.login-section {
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+}
+
+.login-container-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 60px 50px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-container-box h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #00ff7f 0%, #32cd32 50%, #ff69b4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(0, 255, 127, 0.3);
+}
+
+.login-subtitle {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #e2e8f0;
+    margin-bottom: 40px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Icon Buttons Container */
+.icon-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    margin-top: 40px;
+}
+
+/* Icon Button Wrapper */
+.icon-button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Icon Buttons */
+.icon-button {
+    width: 120px;
+    height: 120px;
+    border-radius: 24px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.icon-button:hover::before {
+    opacity: 1;
+}
+
+.icon-button:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.icon-button:active {
+    transform: translateY(-4px) scale(1.02);
+}
+
+/* User Button */
+.user-button {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.user-button:hover {
+    box-shadow: 0 20px 50px rgba(79, 172, 254, 0.4);
+}
+
+/* Admin Button */
+.admin-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.admin-button:hover {
+    box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
+}
+
+/* Button Icons */
+.button-icon {
+    width: 50px;
+    height: 50px;
+    color: white;
+    z-index: 1;
+    position: relative;
+}
+
+/* Button Labels */
+.button-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    transition: all 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.icon-button-wrapper:hover .button-label {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Team Section */
+.team-section {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
+}
+
+.team-container {
+    max-width: 1200px;
+    width: 100%;
+    text-align: center;
+}
+
+.team-section h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 50px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #00ff7f 0%, #32cd32 50%, #ff69b4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 15px rgba(0, 255, 127, 0.2);
+}
+
+.team-cards-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 30px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0 20px;
+}
+
+.team-card {
+    width: 320px;
+    height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.team-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.team-card-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.team-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.team-card:hover .team-card-image img {
+    transform: scale(1.1);
+}
+
+.team-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.7) 50%,
+        rgba(0, 0, 0, 0.3) 80%,
+        transparent 100%
+    );
+    padding: 30px 25px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.team-card:hover .team-card-overlay {
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.8) 60%,
+        rgba(0, 0, 0, 0.4) 90%,
+        transparent 100%
+    );
+}
+
+.team-card-content h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.team-card-content p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #00ff7f;
+    margin-bottom: 12px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.team-description {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #e2e8f0;
+    line-height: 1.5;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+}
+
+/* Footer Section */
+.footer-container {
+    background: #000000;
+    width: 100%;
+    padding: 20px 0;
+    margin-top: 0;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+    flex: 1;
+    text-align: center;
+}
+
+.footer-left {
+    text-align: left;
+}
+
+.footer-right {
+    text-align: right;
+}
+
+.footer-container p {
+    color: #ffffff;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 400;
+}
+
+.footer-center p {
+    color: #00ff7f;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    section {
+        padding: 30px 15px;
+    }
+
+    .main-container-box,
+    .login-container-box {
+        padding: 50px 30px;
+        border-radius: 20px;
+    }
+
+    .library-section {
+        margin-bottom: 40px;
+    }
+
+    .library-icon-wrapper {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .library-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    h1,
+    .login-container-box h2 {
+        font-size: 2.4rem;
+    }
+
+    .subtitle,
+    .login-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .icon-buttons-container {
+        gap: 60px;
+        margin-top: 30px;
+    }
+
+    .icon-button {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+    }
+
+    .button-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .button-label {
+        font-size: 1rem;
+    }
+
+    .about-us-container {
+        padding: 35px 25px;
+        text-align: center;
+    }
+
+    .about-us-container h2 {
+        font-size: 1.9rem;
+        margin-bottom: 20px;
+    }
+
+    .about-us-container p {
+        font-size: 1rem;
+        margin-bottom: 18px;
+    }
+
+    .team-section h2 {
+        font-size: 2rem;
+        margin-bottom: 40px;
+    }
+
+    .team-cards-container {
+        gap: 20px;
+        padding: 0 15px;
+    }
+
+    .team-card {
+        width: 280px;
+        height: 350px;
+    }
+
+    .team-card-overlay {
+        padding: 25px 20px;
+    }
+
+    .team-card-content h3 {
+        font-size: 1.6rem;
+    }
+
+    .team-card-content p {
+        font-size: 1rem;
+    }
+
+    .team-description {
+        font-size: 0.9rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .footer-left,
+    .footer-center,
+    .footer-right {
+        text-align: center;
+    }
+
+    .footer-container p {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-container-box,
+    .login-container-box {
+        padding: 40px 25px;
+    }
+
+    h1,
+    .login-container-box h2 {
+        font-size: 2rem;
+    }
+
+    .subtitle,
+    .login-subtitle {
+        font-size: 1rem;
+    }
+
+    .icon-buttons-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .icon-button {
+        width: 90px;
+        height: 90px;
+        border-radius: 18px;
+    }
+
+    .button-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .button-label {
+        font-size: 0.95rem;
+    }
+
+    .about-us-container {
+        padding: 30px 20px;
+    }
+
+    .about-us-container h2 {
+        font-size: 1.6rem;
+        margin-bottom: 18px;
+    }
+
+    .about-us-container p {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+
+    .team-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+    }
+
+    .team-cards-container {
+        gap: 15px;
+        padding: 0 10px;
+    }
+
+    .team-card {
+        width: 260px;
+        height: 320px;
+    }
+
+    .team-card-overlay {
+        padding: 20px 18px;
+    }
+
+    .team-card-content h3 {
+        font-size: 1.4rem;
+    }
+
+    .team-card-content p {
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+
+    .team-description {
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+    .footer-container {
+        padding: 15px 0;
+    }
+
+    .footer-content {
+        padding: 0 15px;
+        gap: 8px;
+    }
+
+    .footer-container p {
+        font-size: 12px;
+    }
+}

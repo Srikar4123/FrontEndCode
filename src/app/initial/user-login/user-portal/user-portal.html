@@ -1,0 +1,271 @@
+<div class="user-container">
+  <!-- Left Sidebar -->
+  <div class="sidebar" [class.closed]="!sidebarOpen">
+    <!-- User Profile -->
+    <div class="user-profile">
+      <div class="profile-pic">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="User">
+      </div>
+      <div class="user-info" *ngIf="sidebarOpen">
+        <h3>{{ userName }}</h3>
+        <p>{{ userPhone }}</p>
+        <p class="email">{{ userEmail }}</p>
+      </div>
+    </div>
+
+    <!-- Menu List -->
+    <div class="menu-section" *ngIf="sidebarOpen">
+      <!-- Dashboard -->
+      <div class="menu-item" 
+           [class.active]="selectedMenu === 'dashboard'"
+           (click)="changeMenu('dashboard')">
+        <div class="menu-icon">
+          <span class="material-symbols-outlined">dashboard</span>
+        </div>
+        <span class="menu-text">Dashboard</span>
+      </div>
+
+      <!-- Browse Books with Dropdown -->
+      <div class="menu-group">
+        <div class="menu-item" 
+             [class.active]="selectedMenu === 'browse-books'"
+             (click)="toggleBooksDropdown()">
+          <div class="menu-icon">
+            <span class="material-symbols-outlined">menu_book</span>
+          </div>
+          <span class="menu-text">Browse Books</span>
+          <span class="dropdown-arrow">
+            {{ booksDropdownOpen ? '▼' : '▶' }}
+          </span>
+        </div>
+        
+        <!-- Books Dropdown -->
+        <div class="dropdown-menu" *ngIf="booksDropdownOpen">
+          <div class="dropdown-item" 
+               *ngFor="let subMenu of menus[0].subMenus"
+               [class.active]="selectedSubMenu === subMenu.name"
+               (click)="selectSubMenu(subMenu.name)">
+            <span class="sub-icon">•</span>
+            <span>{{ subMenu.title }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Account with Dropdown -->
+      <div class="menu-group">
+        <div class="menu-item" 
+             [class.active]="selectedMenu === 'my-account'"
+             (click)="toggleAccountDropdown()">
+          <div class="menu-icon">
+            <span class="material-symbols-outlined">account_circle</span>
+          </div>
+          <span class="menu-text">My Account</span>
+          <span class="dropdown-arrow">
+            {{ accountDropdownOpen ? '▼' : '▶' }}
+          </span>
+        </div>
+        
+        <!-- Account Dropdown -->
+        <div class="dropdown-menu" *ngIf="accountDropdownOpen">
+          <div class="dropdown-item" 
+               *ngFor="let subMenu of menus[1].subMenus"
+               [class.active]="selectedSubMenu === subMenu.name"
+               (click)="selectSubMenu(subMenu.name)">
+            <span class="sub-icon">•</span>
+            <span>{{ subMenu.title }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other Menu Items (No Dropdown) -->
+      <div class="menu-item" 
+           *ngFor="let menu of menus.slice(2)" 
+           [class.active]="selectedMenu === menu.name"
+           (click)="changeMenu(menu.name)">
+        
+        <!-- Simple icons for each menu -->
+        <div class="menu-icon">
+          <span *ngIf="menu.name === 'history'" class="material-symbols-outlined">history</span>
+          <span *ngIf="menu.name === 'wishlist'" class="material-symbols-outlined">favorite</span>
+          <span *ngIf="menu.name === 'notifications'" class="material-symbols-outlined">notifications</span>
+        </div>
+        
+        <span class="menu-text">{{ menu.title }}</span>
+      </div>
+
+      <!-- Logout Button -->
+      <div class="menu-item logout-item" (click)="logout()">
+        <div class="menu-icon">
+          <span class="material-symbols-outlined">logout</span>
+        </div>
+        <span class="menu-text">Logout</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-area" [class.sidebar-closed]="!sidebarOpen">
+    <!-- Top Header -->
+    <div class="top-bar">
+      <div class="left-section">
+        <button class="menu-toggle" (click)="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <h1>{{ getCurrentTitle() }}</h1>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-section">
+        <div class="search-box">
+          <input 
+            type="text" 
+            placeholder="Search books, authors..." 
+            [(ngModel)]="searchText"
+            (keyup.enter)="doSearch()"
+            class="search-input">
+          <button *ngIf="searchText" class="clear-btn" (click)="clearSearch()">✕</button>
+        </div>
+        <button class="search-button" (click)="doSearch()">
+          <span class="material-symbols-outlined">search</span>
+        </button>
+      </div>
+
+      <button class="home-icon-btn" (click)="goHome()">
+        <span class="material-symbols-outlined">home</span>
+      </button>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+      <!-- Dashboard Page -->
+      <div *ngIf="selectedMenu === 'dashboard'" class="page">
+        <h2>Dashboard</h2>
+        <p>Overview of all library functions and your account.</p>
+        <div class="dashboard-grid">
+          <div class="dashboard-card" (click)="changeMenu('browse-books')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">menu_book</span>
+            </div>
+            <h3>Browse Books</h3>
+            <p>Search and explore our book collection</p>
+          </div>
+          <div class="dashboard-card" (click)="changeMenu('my-account')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">account_circle</span>
+            </div>
+            <h3>My Account</h3>
+            <p>Manage your profile and settings</p>
+          </div>
+          <div class="dashboard-card" (click)="changeMenu('history')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">history</span>
+            </div>
+            <h3>History</h3>
+            <p>View your reading history</p>
+          </div>
+          <div class="dashboard-card" (click)="changeMenu('wishlist')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+            <h3>Wishlist</h3>
+            <p>Books you want to read</p>
+          </div>
+          <div class="dashboard-card" (click)="changeMenu('notifications')">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">notifications</span>
+            </div>
+            <h3>Notifications</h3>
+            <p>Stay updated with library news</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Browse Books Pages -->
+      <div *ngIf="selectedMenu === 'browse-books'" class="page">
+        <!-- Search Books -->
+        <div *ngIf="selectedSubMenu === 'books-search'">
+          <h2>Search Books</h2>
+          <p>Find books by title, author, or genre.</p>
+        </div>
+
+        <!-- Categories -->
+        <div *ngIf="selectedSubMenu === 'books-categories'">
+          <h2>Book Categories</h2>
+          <p>Browse books by different categories.</p>
+        </div>
+
+        <!-- New Arrivals -->
+        <div *ngIf="selectedSubMenu === 'books-new'">
+          <h2>New Arrivals</h2>
+          <p>Check out the latest books in our collection.</p>
+        </div>
+
+        <!-- Popular Books -->
+        <div *ngIf="selectedSubMenu === 'books-popular'">
+          <h2>Popular Books</h2>
+          <p>Most borrowed and highly rated books.</p>
+        </div>
+      </div>
+
+      <!-- My Account Pages -->
+      <div *ngIf="selectedMenu === 'my-account'" class="page">
+        <!-- Profile -->
+        <div *ngIf="selectedSubMenu === 'account-profile'">
+          <h2>My Profile</h2>
+          <p>View and update your personal information.</p>
+        </div>
+
+        <!-- Borrowed Books -->
+        <div *ngIf="selectedSubMenu === 'account-borrowed'">
+          <h2>Borrowed Books</h2>
+          <p>View your currently borrowed books and due dates.</p>
+        </div>
+
+        <!-- Reading History -->
+        <div *ngIf="selectedSubMenu === 'account-history'">
+          <h2>Reading History</h2>
+          <p>See all the books you've borrowed in the past.</p>
+        </div>
+
+        <!-- Settings -->
+        <div *ngIf="selectedSubMenu === 'account-settings'">
+          <h2>Account Settings</h2>
+          <p>Manage your account preferences and settings.</p>
+        </div>
+      </div>
+
+      <!-- History Page -->
+      <div *ngIf="selectedMenu === 'history'" class="page">
+        <h2>History</h2>
+        <p>View your reading and borrowing history.</p>
+        <div class="simple-card">
+          <h4>Recent Activity: 12</h4>
+          <p>Books borrowed: 8</p>
+          <p>Books returned: 4</p>
+        </div>
+      </div>
+
+      <!-- Wishlist Page -->
+      <div *ngIf="selectedMenu === 'wishlist'" class="page">
+        <h2>My Wishlist</h2>
+        <p>Books you want to read in the future.</p>
+        <div class="simple-card">
+          <h4>Wishlist Items: 8</h4>
+          <p>Available: 5</p>
+          <p>Currently borrowed: 3</p>
+        </div>
+      </div>
+
+      <!-- Notifications Page -->
+      <div *ngIf="selectedMenu === 'notifications'" class="page">
+        <h2>Notifications</h2>
+        <p>Stay updated with library announcements and due dates.</p>
+        <div class="simple-card">
+          <h4>Recent Notifications</h4>
+          <p>Book due tomorrow: "The Great Gatsby"</p>
+          <p>New book available: "Digital Minimalism"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
