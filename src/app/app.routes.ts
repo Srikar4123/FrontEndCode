@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Initial } from './initial/initial';
 import { AdminLogin } from './initial/admin-login/admin-login';
-import { UserLogin } from './initial/user-login/user-login';
+import { UserLoginComponent } from './initial/user-login/user-login';
 import { UserPortal } from './initial/user-login/user-portal/user-portal';
 import { AdminPortal } from './initial/admin-login/admin-portal/admin-portal';
 import { ManageBooksComponent } from './initial/admin-login/admin-portal/manage-books/manage-books';
@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'admin/manage-users', pathMatch: 'full' },
 
   { path: 'admin-login', component: AdminLogin },
-  { path: 'user-login', component: UserLogin },
+  { path: 'user-login', component: UserLoginComponent },
   { path: 'user-portal', component: UserPortal },
   { path: 'admin-portal', component: AdminPortal },
   { path: '**', redirectTo: '' },

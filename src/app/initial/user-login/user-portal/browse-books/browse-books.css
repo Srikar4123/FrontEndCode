@@ -1,0 +1,285 @@
+/* ================= ROOT ================= */
+
+.manage-books-container {
+
+    background: #f7f7f7;
+
+    padding: 16px 20px 24px;
+
+    border-radius: 8px;
+
+}
+
+/* ================= TOOLBAR ================= */
+
+.mb-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+
+    gap: 12px;
+
+}
+
+.mb-title {
+
+    font-size: 1.25rem;
+
+    font-weight: 700;
+
+    margin: 0;
+
+}
+
+.mb-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+/* ================= SEARCH ================= */
+
+.search-input {
+
+    padding: 8px 10px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    min-width: 240px;
+
+}
+
+/* ================= GRID ================= */
+
+.cards-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+
+    gap: 16px;
+
+}
+
+/* ================= CARD ================= */
+
+.product-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    transition: transform .15s ease, box-shadow .15s ease;
+
+}
+
+.product-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .1);
+
+}
+
+/* ================= IMAGE ================= */
+
+.thumb {
+
+    display: grid;
+
+    place-items: center;
+
+    padding: 12px;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+.thumb img {
+
+    width: 100%;
+
+    max-width: 180px;
+
+    aspect-ratio: 2 / 3;
+
+    object-fit: cover;
+
+    border-radius: 6px;
+
+}
+
+/* ================= BODY ================= */
+
+.body {
+
+    padding: 12px;
+
+    flex: 1;
+
+}
+
+.title {
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    margin: 0 0 4px;
+
+}
+
+.byline {
+
+    font-size: .85rem;
+
+    color: #6b7280;
+
+    margin-bottom: 8px;
+
+}
+
+.desc {
+
+    font-size: .9rem;
+
+    color: #374151;
+
+    line-height: 1.4;
+
+    min-height: 44px;
+
+    margin-bottom: 10px;
+
+}
+
+.availability,
+
+.published-year {
+
+    font-size: .85rem;
+
+    color: #6b7280;
+
+}
+
+/* ================= ACTIONS ================= */
+
+.row-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px;
+
+    border-top: 1px solid #eee;
+
+}
+
+button.primary {
+
+    background: #2563eb;
+
+    color: #fff;
+
+    border: none;
+
+    padding: 8px 14px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+}
+
+button.secondary {
+
+    background: #374151;
+
+    color: #fff;
+
+    border: none;
+
+    padding: 8px 14px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+}
+
+button:disabled {
+
+    opacity: .6;
+
+    cursor: not-allowed;
+
+}
+
+/* ================= FILTER ================= */
+
+.filter-pop summary {
+
+    cursor: pointer;
+
+    padding: 6px 8px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    background: #fff;
+
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 640px) {
+
+    .mb-toolbar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .mb-actions {
+
+        width: 100%;
+
+        justify-content: space-between;
+
+    }
+
+    .search-input {
+
+        width: 100%;
+
+    }
+
+}

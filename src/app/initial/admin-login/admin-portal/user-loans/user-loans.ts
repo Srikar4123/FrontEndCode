@@ -1,176 +1,111 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AccountsService } from '../../../../Services/Accounts.Services';
-import { FinesService } from '../../../../Services/Fines.Services';
-import { Account, AccountRole } from '../../../../Models/Accounts';
-import { FineLoan, ReturnDto, PayFineDto } from '../../../../Models/Fines';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+
+import { FinesService } from '../../../../Services/Fines.Services';
+import { FineLoan } from '../../../../Models/Fines';
+
+interface UserLoanSummary {
+  userId: number;
+  userName: string;
+  totalLoans: number;
+  activeLoans: number;
+  overdueLoans: number;
+  unpaidFineCount: number;
+  totalOutstanding: number;
+}
 
 @Component({
   selector: 'app-user-loans',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './user-loans.html',
   styleUrls: ['./user-loans.css'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
 })
 export class UserLoansComponent implements OnInit {
-  // Route state
-  userId!: number;
-  userNameFromQuery = '';
-
-  // User header
-  user: Account | null = null;
-  userLoading = false;
-  userError = '';
-
-  // Loans/fines
-  loans: FineLoan[] = [];
-  loansLoading = false;
-  loansError = '';
-
-  // Stats
-  activeLoans = 0;
-  canBorrow = true;
-  totalOutstanding = 0;
+  summaries$ = new BehaviorSubject<UserLoanSummary[]>([]);
+  loading = false;
+  error = '';
 
   constructor(
-    private readonly route: ActivatedRoute,
+    private readonly finesService: FinesService,
     private readonly router: Router,
-    private readonly accounts: AccountsService,
-    private readonly fines: FinesService
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    // Read route params: /admin/users/:id/loans?userName=...
-    this.userId = Number(this.route.snapshot.paramMap.get('id'));
-    this.userNameFromQuery = String(this.route.snapshot.queryParamMap.get('userName') || '');
+    this.load();
+  }
 
-    if (!this.userId || Number.isNaN(this.userId)) {
-      this.userError = 'Invalid user id in route.';
-      return;
+  load(): void {
+    this.loading = true;
+    this.error = '';
+
+    // this.finesService
+    //   .getLoans()
+    //   .pipe(
+    //     finalize(() => {
+    //       this.loading = false;
+    //       this.cdr.markForCheck();
+    //     })
+    //   )
+    //   .subscribe({
+    //     next: (loans) => {
+    //       const summaries = this.buildSummary(loans);
+    //       this.summaries$.next(summaries);
+    //     },
+    //     error: (err) => {
+    //       this.error = err?.error?.message || 'Failed to load loan summary';
+    //     },
+    //   });
+  }
+
+  private buildSummary(loans: FineLoan[]): UserLoanSummary[] {
+    const map = new Map<number, UserLoanSummary>();
+    const today = new Date();
+
+    for (const loan of loans) {
+      if (!map.has(loan.userId)) {
+        map.set(loan.userId, {
+          userId: loan.userId,
+          userName: loan.userName,
+          totalLoans: 0,
+          activeLoans: 0,
+          overdueLoans: 0,
+          unpaidFineCount: 0,
+          totalOutstanding: 0,
+        });
+      }
+
+      const summary = map.get(loan.userId)!;
+      summary.totalLoans++;
+
+      if (!loan.returnDate) {
+        summary.activeLoans++;
+        const due = new Date(loan.dueDate);
+        if (!isNaN(due.getTime()) && due < today) {
+          summary.overdueLoans++;
+        }
+      }
+
+      if (!loan.paymentStatus && loan.fineAmount > 0) {
+        summary.unpaidFineCount++;
+        summary.totalOutstanding += loan.fineAmount;
+      }
     }
 
-    this.loadUser();
-    this.loadLoansAndStats();
+    return Array.from(map.values());
   }
 
-  // ---- Loaders ----
-  loadUser(): void {
-    this.userLoading = true;
-    this.userError = '';
-    this.accounts.getById(this.userId).subscribe({
-      next: (acc) => {
-        this.user = acc;
-        this.userLoading = false;
-      },
-      error: (err) => {
-        this.userError = this.extractError(err, 'Failed to load user.');
-        this.userLoading = false;
-      },
+  viewUserLoans(userId: number): void {
+    this.router.navigate(['/user-loans'], {
+      queryParams: { userId },
     });
   }
 
-  loadLoansAndStats(): void {
-    this.loansLoading = true;
-    this.loansError = '';
-
-    // Loans list
-    this.fines.getLoans({ userId: this.userId }).subscribe({
-      next: (data) => {
-        this.loans = data ?? [];
-        this.loansLoading = false;
-      },
-      error: (err) => {
-        this.loansError = this.extractError(err, 'Failed to load loans.');
-        this.loansLoading = false;
-      },
-    });
-
-    // Active count
-    this.fines.getActiveCount(this.userId).subscribe({
-      next: (stats) => {
-        this.activeLoans = stats?.activeLoans ?? 0;
-        this.canBorrow = !!stats?.canBorrow;
-      },
-      error: (err) => {
-        this.loansError = this.extractError(err, 'Failed to load active count.');
-      },
-    });
-
-    // Outstanding total
-    this.fines.getOutstanding(this.userId).subscribe({
-      next: (res) => {
-        this.totalOutstanding = res?.totalOutstanding ?? 0;
-      },
-      error: (err) => {
-        this.loansError = this.extractError(err, 'Failed to load outstanding total.');
-      },
-    });
-  }
-
-  // ---- Actions ----
-  returnLoan(loan: FineLoan): void {
-    if (!confirm(`Return loan #${loan.id} for book #${loan.bookId}?`)) return;
-    const dto: ReturnDto = { loanId: loan.id };
-    this.fines.returnLoan(dto).subscribe({
-      next: () => this.loadLoansAndStats(),
-      error: (err) => {
-        this.loansError = this.extractError(err, 'Return failed.');
-      },
-    });
-  }
-
-  payFine(loan: FineLoan): void {
-    const min = loan.fineAmount ?? 0;
-    const input = prompt(`Enter amount to pay (>= outstanding fine ${min}):`, String(min));
-    if (input === null) return;
-    const amount = Number(input);
-    if (Number.isNaN(amount) || amount < min) {
-      alert('Amount must be a number and >= outstanding fine.');
-      return;
-    }
-    const dto: PayFineDto = { loanId: loan.id, amount };
-    this.fines.payFine(dto).subscribe({
-      next: () => this.loadLoansAndStats(),
-      error: (err) => {
-        this.loansError = this.extractError(err, 'Payment failed.');
-      },
-    });
-  }
-
-  // ---- Helpers ----
-  roleLabel(role: AccountRole | number | string | undefined): string {
-    if (role === 1 || role === AccountRole.Admin) return 'Admin';
-    return 'User';
-  }
-  isActiveLoan(loan: FineLoan): boolean {
-    return !loan.returnDate;
-  }
-  isOverdue(loan: FineLoan): boolean {
-    const nowIso = new Date().toISOString();
-    return !loan.returnDate && loan.dueDate < nowIso;
-  }
-  isUnpaid(loan: FineLoan): boolean {
-    return (loan.fineAmount ?? 0) > 0 && !loan.paymentStatus;
-  }
-  statusLabels(loan: FineLoan): string[] {
-    const labels: string[] = [];
-    if (this.isActiveLoan(loan)) labels.push('Active');
-    if (this.isOverdue(loan)) labels.push('Overdue');
-    if (!this.isActiveLoan(loan)) labels.push('Returned');
-    if (this.isUnpaid(loan)) labels.push('Unpaid');
-    if ((loan.fineAmount ?? 0) > 0 && loan.paymentStatus) labels.push('Paid');
-    return labels;
-  }
-  displayName(): string {
-    return this.user?.userName || this.userNameFromQuery || `User #${this.userId}`;
-  }
-  backToUsers(): void {
-    this.router.navigateByUrl('/admin/manage-users');
-  }
-  private extractError(err: any, fallback: string): string {
-    const msg = err?.error?.message || err?.message || '';
-    return msg ? `${fallback} ${msg}` : fallback;
+  trackByUserId(_: number, item: UserLoanSummary): number {
+    return item.userId;
   }
 }
-``;

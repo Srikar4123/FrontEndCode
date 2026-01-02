@@ -1,6 +1,10 @@
+/* ================= BASE ================= */
+
 .container {
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     padding: 12px;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .toolbar {
@@ -8,33 +12,97 @@
     gap: 12px;
     align-items: center;
     margin-bottom: 12px;
+    flex-wrap: wrap;
 }
+
+/* ================= GRID ================= */
 
 .grid {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
+    background: #ffffff;
 }
 
 .grid th,
 .grid td {
     border: 1px solid #ddd;
     padding: 6px 8px;
+    word-break: break-word;
 }
 
 .grid th {
-    background: #f5f5f5;
-    text-align: left;
+    background: #e8f0fe;
+    color: #1a3d7c;
+    font-weight: 600;
 }
 
-.actions {
+.grid tr:nth-child(even) {
+    background: #f9fbff;
+}
+
+/* ================= EDIT MODE ================= */
+
+.grid input,
+.grid select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ================= ACTION ICONS ================= */
+
+.action-icon {
+    font-size: 17px;
+    cursor: pointer;
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.action-icon:hover {
+    transform: scale(1.2);
+}
+
+.edit {
+    color: #3498db;
+}
+
+.save {
+    color: #2ecc71;
+}
+
+.cancel {
+    color: #e74c3c;
+}
+
+.delete {
+    color: #c0392b;
+}
+
+/* ================= ACTION LAYOUT ================= */
+
+.actions-cell {
     display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
-.danger {
-    color: #b00020;
+/* Loans / Edit / Delete */
+.actions-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
 }
+
+/* Save / Cancel */
+.actions-horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: center;
+}
+
+/* ================= STATUS ================= */
 
 .status {
     margin: 8px 0;
@@ -47,124 +115,244 @@
 }
 
 .empty {
-    color: #555;
     margin-top: 8px;
-}
-
-.create {
-    margin-top: 16px;
-    border-top: 1px solid #eee;
-    padding-top: 12px;
-}
-
-.row {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(160px, 1fr));
-    gap: 8px;
-}
-
-label {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-label.inline {
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-}
-
-input,
-select {
-    padding: 6px 8px;
-}
-
-dialog.dialog {
-    border: none;
-    border-radius: 8px;
-    padding: 0;
-    width: min(90vw, 640px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, .25);
-}
-
-dialog::backdrop {
-    background: rgba(0, 0, 0, .5);
-}
-
-.modal-header,
-.modal-footer {
-    padding: 12px 16px;
-    border-bottom: 1px solid #eee;
-}
-
-.modal-footer {
-    border-top: 1px solid #eee;
-    border-bottom: none;
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-}
-
-.modal-body {
-    padding: 16px;
-}
-
-.icon {
-    margin-left: auto;
-}
-
-.row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.row label {
-    display: grid;
-    gap: 6px;
-}
-
-.inline {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.icon-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    padding: 6px;
-}
-
-.icon-btn:hover {
-    background-color: rgba(0, 0, 0, 0.08);
-}
-
-.icon-btn .material-symbols-outlined {
-    font-size: 24px;
-    /* adjust size */
     color: #555;
-    /* icon color */
 }
 
-.icon-btn:hover .material-symbols-outlined {
-    color: #000;
-    /* hover effect */
+/* ================= LOANS PANEL (FIXED) ================= */
+
+.loans-panel {
+    margin-top: 28px;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
 }
 
-.activate {
-    color: green;
+.loans-panel h4 {
+    margin-bottom: 12px;
+    color: #1a3d7c;
+    font-weight: 600;
 }
 
-.deactivate {
-    color: red;
+.loans-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
+.loans-table th,
+.loans-table td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+}
+
+.loans-table th {
+    background: #f0f6ff;
+    color: #1f4e8c;
+    font-weight: 600;
+}
+
+.loans-table tr:nth-child(even) {
+    background: #f9fbff;
+}
+
+.muted {
+    text-align: center;
+    color: #777;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    .grid th,
+    .grid td {
+        font-size: 13px;
+        padding: 5px 6px;
+    }
+
+    .action-icon {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .grid,
+    .loans-panel {
+        overflow-x: auto;
+    }
+}
+
+/* ================= TOOLBAR FIX (ONLY ADDITION) ================= */
+
+/* Better horizontal alignment */
+
+.toolbar {
+
+    justify-content: flex-start;
+
+}
+
+/* Group labels neatly */
+
+.toolbar label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: 14px;
+
+    color: #374151;
+
+}
+
+/* Inputs inside toolbar */
+
+.toolbar input,
+
+.toolbar select {
+
+    padding: 6px 10px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    min-width: 180px;
+
+}
+
+/* Make search slightly wider */
+
+.toolbar input {
+
+    min-width: 220px;
+
+}
+
+/* Toolbar buttons */
+
+.toolbar button {
+
+    padding: 6px 12px;
+
+    border-radius: 6px;
+
+    border: 1px solid #d1d5db;
+
+    background: #ffffff;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+
+}
+
+.toolbar button:hover {
+
+    background: #f3f4f6;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+}
+
+/* Primary button */
+
+.toolbar button.primary {
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    border-color: #2563eb;
+
+}
+
+.toolbar button.primary:hover {
+
+    background: #1d4ed8;
+
+}
+
+/* Mobile: stack neatly */
+
+@media (max-width: 768px) {
+
+    .toolbar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .toolbar label,
+
+    .toolbar button {
+
+        width: 100%;
+
+    }
+
+    .toolbar input,
+
+    .toolbar select {
+
+        width: 100%;
+
+    }
+
+}
+
+/* ================= TOOLBAR SPACING TWEAK ================= */
+
+/* Add space between Role and Search */
+
+.toolbar label:first-child {
+
+    margin-right: 18px;
+
+}
+
+/* Push Search slightly to the right */
+
+.toolbar label:nth-child(2) {
+
+    margin-left: 10px;
+
+}
+
+/* Space between buttons (Refresh & Create Account) */
+
+.toolbar button {
+
+    margin-left: 6px;
+
+}
+
+/* Extra space before Create Account */
+
+.toolbar button.primary {
+
+    margin-left: 14px;
+
+}
+
+/* Align everything neatly in one line */
+
+.toolbar {
+
+    align-items: center;
+
+}

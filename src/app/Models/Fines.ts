@@ -1,38 +1,52 @@
 export interface FineLoan {
-  id: number; // Fines.Id
-  userId: number; // Fines.UserId (FK to Account)
-  bookId: number; // Fines.BookId (FK to Books)
-  issueDate: string; // ISO string (DateTime)
-  dueDate: string; // ISO string (DateTime)
-  returnDate?: string | null; // ISO string or null
-  fineAmount: number; // decimal
-  paymentStatus: boolean; // true if paid
-
-  // Optional enrichments your API may include from joins:
-  title?: string; // Book.title (from navigation)
-  userName?: string; // Account.userName (from navigation)
+  id: number;
+  userId: number;
+  userName: string;
+  bookId: number;
+  title: string | null;
+  issueDate: string; // ISO string
+  dueDate: string; // ISO string
+  returnDate: string | null; // ISO or null
+  fineAmount: number;
+  paymentStatus: boolean;
 }
 
-// User borrow (self-service issue) payload
+/* ---------- DTOs ---------- */
+
+export interface AdminIssueDto {
+  adminId: number;
+  userId: number;
+  bookId: number;
+  issueDate: string;
+  dueDate: string;
+}
+
 export interface BorrowDto {
-  userId: number; // Account.Id with role User
-  bookId: number; // Books.Id
-  issueDate: string; // new Date().toISOString()
-  dueDate: string; // new Date().toISOString()
+  userId: number;
+  bookId: number;
+  issueDate: string;
+  dueDate: string;
 }
 
-// Admin issuing to a user payload (same as borrow + adminId)
-export interface AdminIssueDto extends BorrowDto {
-  adminId: number; // Account.Id with role Admin
-}
-
-// Return a book (finalize loan and compute fine)
 export interface ReturnDto {
-  loanId: number; // Fines.Id
+  loanId: number;
+  userId: number;
 }
 
-// Pay fine for a loan
 export interface PayFineDto {
-  loanId: number; // Fines.Id
-  amount: number; // amount to pay (>= fineAmount)
+  loanId: number;
+  amount: number;
+}
+
+export interface LoanDto {
+  id: number;
+  userId: number;
+  userName?: string;
+  bookId: number; // <-- will display exactly as in Fines.BookId
+  title?: string; // optional, from Books
+  issueDate: string; // ISO string
+  dueDate: string;
+  returnDate?: string | null;
+  fineAmount: number;
+  paymentStatus: boolean; // true=Paid, false=Unpaid
 }
