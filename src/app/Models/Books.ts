@@ -8,6 +8,7 @@ export interface Books {
   genre: string;
   totalCopies: number;
   availableCopies: number;
+  publishedYear: string;
 }
 
 export interface BookDto {
@@ -19,4 +20,5 @@ export interface BookDto {
   genre: string;
   totalCopies: number;
   availableCopies: number;
+  publishedYear: string;
 }

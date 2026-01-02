@@ -1,0 +1,109 @@
+<div class="manage-books-container">
+  <!-- ================= TOP BAR ================= -->
+  <div class="mb-toolbar">
+    <h3 class="mb-title">Browse Books</h3>
+
+    <div class="mb-actions">
+      <!-- Genre Filter -->
+      <details class="filter-pop">
+        <summary>
+          <span>Genre {{ genre }}</span>
+        </summary>
+
+        <div class="filter-panel">
+          <label for="genre">Genre</label>
+          <select id="genre" [value]="genre" (change)="onGenreChange($event)">
+            <option *ngFor="let g of genresPreset" [value]="g">{{ g }}</option>
+          </select>
+
+          <div class="filter-actions">
+            <button type="button" class="muted" (click)="clearFilter()">Clear</button>
+            <button type="button" class="primary" (click)="applyFilter()">Apply</button>
+          </div>
+        </div>
+      </details>
+
+      <!-- Search -->
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search by title or author..."
+        [(ngModel)]="search"
+        (input)="applySearch()"
+      />
+    </div>
+  </div>
+
+  <!-- ================= BOOK GRID ================= -->
+  <div
+    class="cards-grid"
+    [style.display]="'grid'"
+    [style.gridTemplateColumns]="'repeat(3, minmax(0, 1fr))'"
+    [style.gap.px]="14"
+  >
+    <ng-container *ngIf="filteredBooks.length > 0; else noBooks">
+      <article class="product-card" *ngFor="let b of filteredBooks; trackBy: trackById">
+        <!-- Book Image -->
+        <div class="thumb">
+          <img
+            [src]="b.imageUrl || 'https://via.placeholder.com/220x330?text=No+Image'"
+            alt="Cover of {{ b.title }}"
+          />
+        </div>
+
+        <!-- Book Info -->
+        <div class="body">
+          <h6 class="title">{{ b.title }}</h6>
+          <p class="byline">{{ b.author }} • {{ b.genre }}</p>
+
+          <p class="desc">
+            {{
+              b.description
+                ? b.description.length > 120
+                  ? (b.description | slice : 0 : 120) + '…'
+                  : b.description
+                : '—'
+            }}
+          </p>
+
+          <div class="availability">Available: {{ b.availableCopies }} / {{ b.totalCopies }}</div>
+
+          <div class="published-year">Year: {{ b.publishedYear || '—' }}</div>
+        </div>
+
+        <!-- ================= USER ACTION ================= -->
+        <div class="row-actions">
+          <!-- ✅ RETURN (ONLY if THIS USER borrowed this book) -->
+          <button
+            class="secondary"
+            *ngIf="getMyActiveLoan(b.id) as myLoan"
+            (click)="returnBook(myLoan)"
+          >
+            Return
+          </button>
+
+          <!-- ✅ BORROW (if THIS USER has NOT borrowed AND copies exist) -->
+          <button
+            class="primary"
+            *ngIf="!getMyActiveLoan(b.id) && b.availableCopies > 0"
+            (click)="borrow(b)"
+          >
+            Borrow
+          </button>
+
+          <!-- ✅ UNAVAILABLE (ONLY when copies are zero) -->
+          <button class="muted" *ngIf="!getMyActiveLoan(b.id) && b.availableCopies === 0" disabled>
+            Unavailable
+          </button>
+        </div>
+      </article>
+    </ng-container>
+
+    <!-- Empty State -->
+    <ng-template #noBooks>
+      <div class="muted" style="grid-column: 1 / -1; padding: 16px; text-align: center">
+        No books found.
+      </div>
+    </ng-template>
+  </div>
+</div>

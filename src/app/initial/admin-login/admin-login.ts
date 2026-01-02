@@ -177,18 +177,20 @@ export class AdminLogin implements OnInit, OnDestroy {
 
     this.http.post<any>('https://localhost:7264/api/accounts/login', payload).subscribe({
       next: (res) => {
-        console.log('Login success:', res);
+        this.successMessage = 'Login successful! Redirecting...';
 
-        this.successMessage = res.message || 'Login successful! Redirecting...';
-
-        // optional: store user session
-        localStorage.setItem('admin', JSON.stringify(res));
+        localStorage.setItem('account', JSON.stringify(res));
 
         this.stopSlideshow();
 
-        // Navigate after small delay for UX
         setTimeout(() => {
-          this.router.navigate(['/admin-portal']);
+          if (res.role === 1) {
+            // Admin
+            this.router.navigate(['/admin-portal']);
+          } else {
+            // User
+            this.router.navigate(['/user-portal']);
+          }
         }, 500);
       },
 

@@ -40,7 +40,7 @@ export class BooksService {
    */
   getAll(genre?: string): Observable<Books[]> {
     let params = new HttpParams();
-    if (genre && genre.trim().length > 0) {
+    if (genre && genre.trim().length > 0 && genre.trim().toLowerCase() != 'all') {
       params = params.set('genre', genre.trim());
     }
     return this.http.get<Books[]>(this.baseUrl, { params });

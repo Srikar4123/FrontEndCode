@@ -14,7 +14,7 @@ import { Account, AccountCreateDto, AccountUpdateDto, AccountRole } from '../Mod
   providedIn: 'root',
 })
 export class AccountsService {
-  private readonly baseUrl = `${API_BASE_URL}/accounts`;
+  private readonly baseUrl = `${API_BASE_URL}/Accounts`;
 
   constructor(private http: HttpClient) {}
 
@@ -105,5 +105,12 @@ export class AccountsService {
 
   activate(id: number): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.baseUrl}/${id}/activate`, {});
+  }
+
+  login(email: string, password: string) {
+    return this.http.post<any>(`${this.baseUrl}/login`, {
+      email,
+      password,
+    });
   }
 }

@@ -1,68 +1,55 @@
 <section class="container">
+  <!-- Toolbar -->
   <header class="toolbar">
-    <button (click)="backToUsers()">&larr; Back to Users</button>
-    <h3 class="title">Loans & Fines — {{ displayName() }} (ID #{{ userId }})</h3>
+    <h2>User Loan & Fine Summary</h2>
+
+    <button (click)="load()">Refresh</button>
   </header>
 
-  <div class="error" *ngIf="userError">{{ userError }}</div>
-  <div class="status" *ngIf="userLoading">Loading user…</div>
+  <!-- Status -->
+  <div class="status" *ngIf="loading">Loading summary...</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
 
-  <section class="header-card" *ngIf="user">
-    <div><strong>Role:</strong> {{ roleLabel(user.role) }}</div>
-    <div><strong>Active:</strong> {{ user.isActive ? 'Yes' : 'No' }}</div>
-    <div><strong>Email:</strong> {{ user.email }}</div>
-    <div><strong>Phone:</strong> {{ user.phoneNumber }}</div>
-    <div><strong>Created:</strong> {{ user.createdAt | date : 'yyyy-MM-dd HH:mm' }}</div>
-  </section>
+  <!-- Table -->
+  <ng-container *ngIf="summaries$ | async as summaries">
+    <table class="grid" *ngIf="summaries.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Total Loans</th>
+          <th>Active Loans</th>
+          <th>Overdue</th>
+          <th>Unpaid Fines</th>
+          <th>Total Outstanding (₹)</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-  <section class="stats-card">
-    <div>
-      Active Loans: <strong>{{ activeLoans }}</strong>
-    </div>
-    <div>
-      Can Borrow: <strong>{{ canBorrow ? 'Yes' : 'No' }}</strong>
-    </div>
-    <div>
-      Outstanding: <strong>{{ totalOutstanding | currency : 'USD' : 'symbol-narrow' }}</strong>
-    </div>
-  </section>
+      <tbody>
+        <tr *ngFor="let s of summaries; trackBy: trackByUserId">
+          <td>{{ s.userName }}</td>
+          <td>{{ s.totalLoans }}</td>
+          <td>{{ s.activeLoans }}</td>
 
-  <div class="error" *ngIf="loansError">{{ loansError }}</div>
-  <div class="status" *ngIf="loansLoading">Loading loans…</div>
+          <td class="overdue" *ngIf="s.overdueLoans > 0; else ok">
+            {{ s.overdueLoans }}
+          </td>
+          <ng-template #ok>
+            <td>0</td>
+          </ng-template>
 
-  <table class="grid" *ngIf="loans.length > 0">
-    <thead>
-      <tr>
-        <th>Loan #</th>
-        <th>Book</th>
-        <th>Issue</th>
-        <th>Due</th>
-        <th>Returned</th>
-        <th>Fine</th>
-        <th>Paid?</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let l of loans">
-        <td>{{ l.id }}</td>
-        <td>{{ l.title || 'Book #' + l.bookId }}</td>
-        <td>{{ l.issueDate | date : 'yyyy-MM-dd' }}</td>
-        <td [class.overdue]="isOverdue(l)">{{ l.dueDate | date : 'yyyy-MM-dd' }}</td>
-        <td>{{ l.returnDate ? (l.returnDate | date : 'yyyy-MM-dd') : '—' }}</td>
-        <td>{{ l.fineAmount | currency : 'INR' : 'symbol-narrow' }}</td>
-        <td>{{ l.paymentStatus ? 'Yes' : 'No' }}</td>
-        <td>
-          <span class="badge" *ngFor="let s of statusLabels(l)">{{ s }}</span>
-        </td>
-        <td class="actions">
-          <button *ngIf="isActiveLoan(l)" (click)="returnLoan(l)">Return</button>
-          <button *ngIf="isUnpaid(l)" class="primary" (click)="payFine(l)">Pay Fine</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <td>{{ s.unpaidFineCount }}</td>
+          <td>₹{{ s.totalOutstanding }}</td>
 
-  <div *ngIf="loans.length === 0 && !loansLoading" class="empty">No loans found for this user.</div>
+          <td class="actions">
+            <button class="link" (click)="viewUserLoans(s.userId)">View Details</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div *ngIf="!loading" class="empty">No loan data available.</div>
+    </ng-template>
+  </ng-container>
 </section>

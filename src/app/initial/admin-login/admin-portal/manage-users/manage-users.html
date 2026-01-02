@@ -11,7 +11,7 @@
     </label>
 
     <label>
-      Search:
+      Search
       <input
         [(ngModel)]="searchQuery"
         (keyup.enter)="load()"
@@ -19,8 +19,14 @@
       />
     </label>
 
-    <button (click)="load()">Refresh</button>
-    <button class="primary" (click)="openCreateModalDialog()">Create Account</button>
+    <button (click)="load()" class="icon-btn-text">
+      <i class="fa-solid fa-rotate"></i>
+      Refresh
+    </button>
+    <button class="primary icon-btn-text" (click)="openCreateModalDialog()">
+      <i class="fa-solid fa-user-plus"></i>
+      Create Account
+    </button>
   </header>
 
   <div class="status" *ngIf="loading">Loading...</div>
@@ -112,42 +118,66 @@
             </ng-container>
           </td>
 
-          <td class="actions">
-            <!-- Loans link to details page -->
-            <a
-              class="link"
-              [routerLink]="['/admin/users', acc.id, 'loans']"
-              [queryParams]="{ userName: acc.userName }"
-              >Loans</a
-            >
+          <td class="actions-cell">
+            <!-- Vertical actions -->
+            <div class="actions-vertical">
+              <a class="link" (click)="openLoans(acc)">Loans</a>
 
-            <button *ngIf="editId !== acc.id" (click)="startEdit(acc)">Edit</button>
-            <button *ngIf="editId === acc.id" (click)="saveEdit(acc.id)">Save</button>
-            <button *ngIf="editId === acc.id" (click)="cancelEdit()">Cancel</button>
+              <i
+                class="fa-solid fa-pen action-icon edit"
+                *ngIf="editId !== acc.id"
+                (click)="startEdit(acc)"
+              ></i>
 
-            <button
-              *ngIf="acc.isActive"
-              class="icon-btn"
-              (click)="deactivate(acc.id)"
-              aria-label="Deactivate"
-            >
-              <span class="material-symbols-outlined deactivate">person_off</span>
-            </button>
+              <i class="fa-solid fa-trash action-icon delete" (click)="remove(acc.id)"></i>
+            </div>
 
-            <button
-              *ngIf="!acc.isActive"
-              class="icon-btn"
-              (click)="activate(acc.id)"
-              aria-label="Activate"
-            >
-              <span class="material-symbols-outlined activate">person</span>
-            </button>
+            <!-- Horizontal actions (edit mode only) -->
+            <div class="actions-horizontal" *ngIf="editId === acc.id">
+              <i class="fa-solid fa-check action-icon save" (click)="saveEdit(acc.id)"></i>
 
-            <button class="danger" (click)="remove(acc.id)">Delete</button>
+              <i class="fa-solid fa-xmark action-icon cancel" (click)="cancelEdit()"></i>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <div class="loans-panel" *ngIf="showLoansPanel && selectedUser">
+      <h4>Loans of {{ selectedUser.userName }}</h4>
+
+      <table class="loans-table">
+        <thead>
+          <tr>
+            <th>Book ID</th>
+            <th>Title</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Fine</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- Use your selectedLoans array from TS -->
+          <tr *ngFor="let loan of selectedLoans; trackBy: trackLoan">
+            <td>{{ loan.bookId }}</td>
+            <td>{{ loan.title || '—' }}</td>
+            <td>{{ loan.issueDate | date : 'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ loan.dueDate | date : 'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ loan.returnDate ? (loan.returnDate | date : 'yyyy-MM-dd HH:mm') : '—' }}</td>
+            <td>{{ loan.fineAmount }}</td>
+            <td>{{ loan.paymentStatus ? 'Paid' : 'Unpaid' }}</td>
+          </tr>
+
+          <!-- Empty state -->
+          <tr *ngIf="(selectedLoans?.length ?? 0) === 0">
+            <td colspan="7" class="muted">No loans found for this user.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <ng-template #emptyState>
       <div *ngIf="!loading" class="empty">No accounts found.</div>

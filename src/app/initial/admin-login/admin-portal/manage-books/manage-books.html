@@ -1,406 +1,400 @@
-<div class="manage-books">
-  <!-- Header -->
-  <header class="header">
-    <h2>Manage Books</h2>
-    <div class="actions">
-      <button type="button" class="btn primary" (click)="toggleCreate()">
+<div class="manage-books-container">
+  <!-- Top toolbar -->
+  <div class="mb-toolbar">
+    <h3 class="mb-title">Manage Books</h3>
+
+    <div class="mb-actions">
+      <!-- Filter popover -->
+      <details class="filter-pop" #filterDetails (click)="onFilterSummaryClick($event)">
+        <summary>
+          <span>Genre {{ genre }}</span>
+        </summary>
+        <div class="filter-panel">
+          <label for="genre">Genre</label>
+          <select id="genre" [value]="genre" (change)="onGenreChange($event)">
+            <option *ngFor="let g of genresPreset" [value]="g">{{ g }}</option>
+          </select>
+          <div class="filter-actions">
+            <button class="muted" type="button" (click)="clearFilter()">Clear</button>
+            <button class="primary" type="button" (click)="applyFilter()">Apply</button>
+          </div>
+        </div>
+      </details>
+
+      <!-- Toggle create -->
+      <button class="secondary" type="button" (click)="toggleCreate()">
         {{ showCreate ? 'Close Add Book' : 'Add Book' }}
       </button>
     </div>
-  </header>
+  </div>
 
-  <!-- Genre Filter -->
-  <section class="filter">
-    <div class="filter-row">
-      <label for="genreInput">Filter by Genre:</label>
-      <input
-        id="genreInput"
-        type="text"
-        placeholder="e.g. Fiction"
-        [(ngModel)]="genre"
-        name="genre"
-      />
+  <!-- Create card -->
+  <div class="card create-card" *ngIf="showCreate">
+    <h4>Add New Book</h4>
+    <form class="grid-2" [formGroup]="createForm" (ngSubmit)="submitCreate()">
+      <label>
+        Title *
+        <input type="text" formControlName="title" />
+        <span
+          class="error"
+          *ngIf="createForm.get('title')?.touched && createForm.get('title')?.hasError('required')"
+        >
+          Title is required.
+        </span>
+      </label>
 
-      <!-- optional presets -->
-      <select [(ngModel)]="genre" name="genrePreset">
-        <option value="">— Presets —</option>
-        <option *ngFor="let g of genresPreset" [value]="g">{{ g }}</option>
-      </select>
+      <label>
+        Author *
+        <input type="text" formControlName="author" />
+        <span
+          class="error"
+          *ngIf="
+            createForm.get('author')?.touched && createForm.get('author')?.hasError('required')
+          "
+        >
+          Author is required.
+        </span>
+      </label>
 
-      <button type="button" class="btn" (click)="load()">Apply</button>
-      <button type="button" class="btn secondary" (click)="clearFilter()">Clear</button>
-    </div>
-  </section>
+      <label>
+        Genre *
+        <input type="text" formControlName="genre" />
+        <span
+          class="error"
+          *ngIf="createForm.get('genre')?.touched && createForm.get('genre')?.hasError('required')"
+        >
+          Genre is required.
+        </span>
+      </label>
 
-  <!-- Create Form -->
-  <section class="create" *ngIf="showCreate">
-    <form [formGroup]="createForm" (ngSubmit)="submitCreate()" novalidate>
-      <fieldset>
-        <legend>Add New Book</legend>
+      <label>
+        Price ($) *
+        <input type="number" formControlName="price" />
+        <span class="error" *ngIf="createForm.get('price')?.hasError('min')"
+          >Price cannot be negative.</span
+        >
+        <span class="error" *ngIf="createForm.get('price')?.hasError('required')"
+          >Price is required.</span
+        >
+      </label>
 
-        <div class="grid-2">
-          <!-- Title -->
-          <div class="form-field">
-            <label>Title <span class="req">*</span></label>
-            <input type="text" formControlName="title" />
-            <div
-              class="error"
-              *ngIf="
-                createForm.get('title')?.touched && createForm.get('title')?.hasError('required')
-              "
-            >
-              Title is required.
-            </div>
-          </div>
+      <label>
+        Total Copies *
+        <input type="number" formControlName="totalCopies" />
+        <span class="error" *ngIf="createForm.get('totalCopies')?.hasError('min')"
+          >Total copies cannot be negative.</span
+        >
+        <span class="error" *ngIf="createForm.get('totalCopies')?.hasError('required')"
+          >Total copies is required.</span
+        >
+      </label>
 
-          <!-- Author -->
-          <div class="form-field">
-            <label>Author <span class="req">*</span></label>
-            <input type="text" formControlName="author" />
-            <div
-              class="error"
-              *ngIf="
-                createForm.get('author')?.touched && createForm.get('author')?.hasError('required')
-              "
-            >
-              Author is required.
-            </div>
-          </div>
+      <label>
+        Available Copies *
+        <input type="number" formControlName="availableCopies" />
+        <span class="error" *ngIf="createForm.get('availableCopies')?.hasError('min')">
+          Available copies cannot be negative.
+        </span>
+        <span class="error" *ngIf="createForm.get('availableCopies')?.hasError('required')">
+          Available copies is required.
+        </span>
+      </label>
 
-          <!-- Genre -->
-          <div class="form-field">
-            <label>Genre <span class="req">*</span></label>
-            <input type="text" formControlName="genre" />
-            <div
-              class="error"
-              *ngIf="
-                createForm.get('genre')?.touched && createForm.get('genre')?.hasError('required')
-              "
-            >
-              Genre is required.
-            </div>
-          </div>
+      <label class="col-span">
+        Image URL
+        <input type="text" formControlName="imageUrl" />
+      </label>
 
-          <!-- Price -->
-          <div class="form-field">
-            <label>Price (₹) <span class="req">*</span></label>
-            <input type="number" formControlName="price" min="0" step="0.01" />
-            <div
-              class="error"
-              *ngIf="createForm.get('price')?.touched && createForm.get('price')?.hasError('min')"
-            >
-              Price cannot be negative.
-            </div>
-            <div
-              class="error"
-              *ngIf="
-                createForm.get('price')?.touched && createForm.get('price')?.hasError('required')
-              "
-            >
-              Price is required.
-            </div>
-          </div>
+      <label class="col-span">
+        Description
+        <textarea rows="3" formControlName="description"></textarea>
+      </label>
 
-          <!-- Total Copies -->
-          <div class="form-field">
-            <label>Total Copies <span class="req">*</span></label>
-            <input type="number" formControlName="totalCopies" min="0" />
-            <div
-              class="error"
-              *ngIf="
-                createForm.get('totalCopies')?.touched &&
-                createForm.get('totalCopies')?.hasError('min')
-              "
-            >
-              Total copies cannot be negative.
-            </div>
-            <div
-              class="error"
-              *ngIf="
-                createForm.get('totalCopies')?.touched &&
-                createForm.get('totalCopies')?.hasError('required')
-              "
-            >
-              Total copies is required.
-            </div>
-          </div>
+      <div class="error col-span" *ngIf="createForm.errors?.['copiesRange']">
+        Available copies cannot exceed total copies.
+      </div>
 
-          <!-- Available Copies -->
-          <div class="form-field">
-            <label>Available Copies <span class="req">*</span></label>
-            <input type="number" formControlName="availableCopies" min="0" />
-            <div
-              class="error"
-              *ngIf="
-                createForm.get('availableCopies')?.touched &&
-                createForm.get('availableCopies')?.hasError('min')
-              "
-            >
-              Available copies cannot be negative.
-            </div>
-            <div
-              class="error"
-              *ngIf="
-                createForm.get('availableCopies')?.touched &&
-                createForm.get('availableCopies')?.hasError('required')
-              "
-            >
-              Available copies is required.
-            </div>
-          </div>
-
-          <!-- Image URL -->
-          <div class="form-field">
-            <label>Image URL</label>
-            <input type="url" formControlName="imageUrl" />
-          </div>
-
-          <!-- Description -->
-          <div class="form-field span-2">
-            <label>Description</label>
-            <textarea rows="3" formControlName="description"></textarea>
-          </div>
-        </div>
-
-        <!-- Cross-field validator error -->
-        <div class="error" *ngIf="createForm.touched && createForm.hasError('copiesRange')">
-          Available copies cannot exceed total copies.
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn primary" [disabled]="createForm.invalid">Create</button>
-          <button type="button" class="btn secondary" (click)="toggleCreate()">Cancel</button>
-        </div>
-      </fieldset>
+      <label
+        >Published Year *
+        <input type="text" formControlName="publishedYear" placeholder="e.g., 2020" />
+      </label>
+      <div class="actions col-span">
+        <button class="muted" type="button" (click)="toggleCreate()">Cancel</button>
+        <button class="primary" type="submit">Add</button>
+      </div>
     </form>
-  </section>
+  </div>
 
-  <!-- Loading state -->
-  <section *ngIf="loading" class="loading">Loading books…</section>
+  <!-- Cards grid -->
+  <div
+    class="cards-grid"
+    [style.display]="'grid'"
+    [style.gridTemplateColumns]="'repeat(3, minmax(0, 1fr))'"
+    [style.gap.px]="12"
+  >
+    <ng-container *ngIf="!loading && (books?.length ?? 0); else noBooks">
+      <article
+        class="product-card"
+        *ngFor="let b of books; trackBy: trackById"
+        tabindex="0"
+        aria-label="Open issue modal"
+      >
+        <!-- Image -->
+        <div class="thumb" aria-label="Cover of {{ b.title }}">
+          <img
+            [src]="b.imageUrl || 'https://via.placeholder.com/220x330?text=No+Image'"
+            (error)="onImgError($event)"
+            alt="Cover of {{ b.title }}"
+          />
+        </div>
 
-  <!-- Table of books -->
-  <section *ngIf="!loading">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Cover</th>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Genre</th>
-          <th>Price</th>
-          <th>Copies (Avail/Total)</th>
-          <th>Description</th>
-          <th style="width: 180px">Actions</th>
-        </tr>
-      </thead>
+        <!-- Body -->
+        <div class="body">
+          <h6 class="title">{{ b.title }}</h6>
+          <p class="byline">{{ b.author }} • {{ b.genre }}</p>
+          <p class="desc">
+            {{
+              b.description
+                ? b.description.length > 120
+                  ? (b.description | slice : 0 : 120) + '…'
+                  : b.description
+                : '—'
+            }}
+          </p>
 
-      <tbody>
-        <tr *ngFor="let b of books; trackBy: trackById">
-          <td>{{ b.id }}</td>
+          <div class="price">$ {{ b.price | number : '1.2-2' }}</div>
+          <div class="availability">Available: {{ b.availableCopies }} / {{ b.totalCopies }}</div>
+          <div class="published-year">Year: {{ b.publishedYear || '—' }}</div>
+        </div>
 
-          <!-- Image -->
-          <td>
-            <img
-              *ngIf="b.imageUrl; else noImage"
-              [src]="b.imageUrl!"
-              alt="{{ b.title }}"
-              class="cover"
-              (error)="b.imageUrl = null"
-            />
-            <ng-template #noImage>
-              <span class="muted">No image</span>
-            </ng-template>
-          </td>
+        <!-- Row actions -->
+        <div class="row-actions">
+          <!-- Stop click bubbling to avoid opening modal when editing/deleting -->
+          <button class="primary" type="button" (click)="$event.stopPropagation(); startEdit(b)">
+            Edit
+          </button>
+          <button class="danger" type="button" (click)="$event.stopPropagation(); delete(b)">
+            Delete
+          </button>
+          <button class="issue-btn" type="button" (click)="openIssueModal(b)">Issue Book</button>
+        </div>
 
-          <!-- If editing this row, show inline edit form cells -->
-          <ng-container *ngIf="editingId === b.id; else viewRow">
-            <!-- Inline Edit Form -->
-            <td colspan="7">
-              <form
-                *ngIf="editingForm"
-                [formGroup]="editingForm"
-                (ngSubmit)="saveEdit(b.id)"
-                novalidate
+        <!-- Inline edit -->
+        <div class="inline-edit" *ngIf="editingId === b.id" (click)="$event.stopPropagation()">
+          <form class="grid-2" [formGroup]="editingForm!" (ngSubmit)="saveEdit(b.id)">
+            <label>
+              Title *
+              <input type="text" formControlName="title" />
+            </label>
+            <label>
+              Author *
+              <input type="text" formControlName="author" />
+            </label>
+            <label>
+              Genre *
+              <input type="text" formControlName="genre" />
+            </label>
+            <label>
+              Price ($) *
+              <input type="number" formControlName="price" />
+            </label>
+            <label>
+              Total Copies *
+              <input type="number" formControlName="totalCopies" />
+            </label>
+            <label>
+              Available Copies *
+              <input type="number" formControlName="availableCopies" />
+            </label>
+            <label>
+              Published Year *
+              <input type="text" formControlName="publishedYear" placeholder="e.g., 2020" />
+            </label>
+            <label class="col-span">
+              Image URL
+              <input type="text" formControlName="imageUrl" />
+            </label>
+            <label class="col-span">
+              Description
+              <textarea rows="3" formControlName="description"></textarea>
+            </label>
+            <div class="error col-span" *ngIf="editingForm?.errors?.['copiesRange']">
+              Available copies cannot exceed total copies.
+            </div>
+            <div class="actions col-span">
+              <button class="muted" type="button" (click)="cancelEdit()">Cancel</button>
+              <button class="primary" type="submit">Save</button>
+            </div>
+          </form>
+        </div>
+      </article>
+      <!--issueee-->
+      <!-- Issue modal -->
+      <div
+        class="modal-overlay"
+        *ngIf="issueModalOpen"
+        (click)="closeIssueModal()"
+        aria-modal="true"
+        role="dialog"
+      >
+        <div class="modal" (click)="$event.stopPropagation()">
+          <header class="modal-header">
+            <div class="modal-title">
+              Issue: {{ selectedBook?.title }}
+              <span class="muted"
+                >({{ selectedBook?.availableCopies }} /
+                {{ selectedBook?.totalCopies }} available)</span
               >
-                <div class="grid-2">
-                  <!-- Title -->
-                  <div class="form-field">
-                    <label>Title <span class="req">*</span></label>
-                    <input type="text" formControlName="title" />
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('title')?.touched &&
-                        editingForm?.get('title')?.hasError('required')
-                      "
-                    >
-                      Title is required.
-                    </div>
-                  </div>
+            </div>
+            <button class="muted close-btn" type="button" (click)="closeIssueModal()">✕</button>
+          </header>
 
-                  <!-- Author -->
-                  <div class="form-field">
-                    <label>Author <span class="req">*</span></label>
-                    <input type="text" formControlName="author" />
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('author')?.touched &&
-                        editingForm?.get('author')?.hasError('required')
-                      "
-                    >
-                      Author is required.
-                    </div>
-                  </div>
+          <section class="modal-body">
+            <!-- Search + Issue row -->
+            <div class="issue-row">
+              <input
+                #searchBox
+                type="text"
+                class="search-input"
+                placeholder="Search users by name/email/phone…"
+                [value]="userSearchTerm"
+                (input)="onUserSearchInput(searchBox.value)"
+              />
 
-                  <!-- Genre -->
-                  <div class="form-field">
-                    <label>Genre <span class="req">*</span></label>
-                    <input type="text" formControlName="genre" />
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('genre')?.touched &&
-                        editingForm?.get('genre')?.hasError('required')
-                      "
-                    >
-                      Genre is required.
-                    </div>
-                  </div>
+              <button
+                class="primary"
+                type="button"
+                [disabled]="!selectedUserId || issuing || (selectedBook?.availableCopies ?? 0) <= 0"
+                (click)="issueSelectedBook()"
+                title="Issue book to selected user"
+              >
+                {{ issuing ? 'Issuing…' : 'Issue Book' }}
+              </button>
+            </div>
 
-                  <!-- Price -->
-                  <div class="form-field">
-                    <label>Price (₹) <span class="req">*</span></label>
-                    <input type="number" formControlName="price" min="0" step="0.01" />
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('price')?.touched &&
-                        editingForm?.get('price')?.hasError('min')
-                      "
-                    >
-                      Price cannot be negative.
-                    </div>
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('price')?.touched &&
-                        editingForm?.get('price')?.hasError('required')
-                      "
-                    >
-                      Price is required.
-                    </div>
-                  </div>
-
-                  <!-- Total Copies -->
-                  <div class="form-field">
-                    <label>Total Copies <span class="req">*</span></label>
-                    <input type="number" formControlName="totalCopies" min="0" />
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('totalCopies')?.touched &&
-                        editingForm?.get('totalCopies')?.hasError('min')
-                      "
-                    >
-                      Total copies cannot be negative.
-                    </div>
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('totalCopies')?.touched &&
-                        editingForm?.get('totalCopies')?.hasError('required')
-                      "
-                    >
-                      Total copies is required.
-                    </div>
-                  </div>
-
-                  <!-- Available Copies -->
-                  <div class="form-field">
-                    <label>Available Copies <span class="req">*</span></label>
-                    <input type="number" formControlName="availableCopies" min="0" />
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('availableCopies')?.touched &&
-                        editingForm?.get('availableCopies')?.hasError('min')
-                      "
-                    >
-                      Available copies cannot be negative.
-                    </div>
-                    <div
-                      class="error"
-                      *ngIf="
-                        editingForm?.get('availableCopies')?.touched &&
-                        editingForm?.get('availableCopies')?.hasError('required')
-                      "
-                    >
-                      Available copies is required.
-                    </div>
-                  </div>
-
-                  <!-- Image URL -->
-                  <div class="form-field">
-                    <label>Image URL</label>
-                    <input type="url" formControlName="imageUrl" />
-                  </div>
-
-                  <!-- Description -->
-                  <div class="form-field span-2">
-                    <label>Description</label>
-                    <textarea rows="3" formControlName="description"></textarea>
-                  </div>
+            <!-- Users list -->
+            <div class="users-list" *ngIf="(users?.length ?? 0) > 0; else noUsers">
+              <button
+                type="button"
+                class="user-item"
+                *ngFor="let u of users"
+                [class.selected]="selectedUserId === u.id"
+                (click)="selectUser(u)"
+                title="Select user"
+              >
+                <div class="user-main">
+                  <span class="user-name">{{ u.userName }}</span>
+                  <span class="user-email muted">{{ u.email }}</span>
                 </div>
+                <div class="user-meta muted">{{ u.phoneNumber }}</div>
+              </button>
+            </div>
+            <ng-template #noUsers>
+              <p class="muted small">Type at least 2 characters to search users.</p>
+            </ng-template>
 
-                <!-- Cross-field validator error -->
-                <div
-                  class="error"
-                  *ngIf="editingForm?.touched && editingForm?.hasError('copiesRange')"
-                >
-                  Available copies cannot exceed total copies.
-                </div>
+            <!-- Error -->
+            <p class="error" *ngIf="issueError">{{ issueError }}</p>
 
-                <div class="form-actions">
-                  <button type="submit" class="btn primary" [disabled]="editingForm?.invalid">
-                    Save
-                  </button>
-                  <button type="button" class="btn secondary" (click)="cancelEdit()">Cancel</button>
-                </div>
-              </form>
-            </td>
+            <!-- Info -->
+            <p class="muted small">
+              * Issue date is now; due date is in {{ defaultLoanDays }} days. (Configured in
+              component)
+            </p>
+          </section>
 
-            <!-- Actions column while editing -->
-            <td>
-              <button class="btn danger" (click)="delete(b)">Delete</button>
-            </td>
-          </ng-container>
+          <footer class="modal-footer">
+            <button class="muted" type="button" (click)="closeIssueModal()">Cancel</button>
+          </footer>
+        </div>
+      </div>
+    </ng-container>
 
-          <!-- View row (non-editing) -->
-          <ng-template #viewRow>
-            <td>{{ b.title }}</td>
-            <td>{{ b.author }}</td>
-            <td>{{ b.genre }}</td>
-            <td>₹ {{ b.price | number : '1.2-2' }}</td>
-            <td>{{ b.availableCopies }} / {{ b.totalCopies }}</td>
-            <td>
-              <span class="desc" [title]="b.description">{{ b.description || '—' }}</span>
-            </td>
-            <td>
-              <div class="row-actions">
-                <button class="btn" (click)="startEdit(b)">Edit</button>
-                <button class="btn danger" (click)="delete(b)">Delete</button>
-              </div>
-            </td>
-          </ng-template>
-        </tr>
+    <ng-template #noBooks>
+      <div class="muted" style="grid-column: 1 / -1; padding: 12px">
+        <ng-container *ngIf="loading; else empty">Loading books…</ng-container>
+        <ng-template #empty>No books found.</ng-template>
+      </div>
+    </ng-template>
+  </div>
 
-        <!-- Empty state -->
-        <tr *ngIf="!loading && books.length === 0">
-          <td colspan="9" class="muted center">No books found.</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <!-- ========================= -->
+  <!-- NEW: Issue modal (center) -->
+  <!-- ========================= -->
+  <div
+    class="modal-overlay"
+    *ngIf="issueModalOpen"
+    (click)="closeIssueModal()"
+    aria-modal="true"
+    role="dialog"
+  >
+    <div class="modal" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div class="modal-title">
+          Issue: {{ selectedBook?.title }}
+          <span class="muted"
+            >({{ selectedBook?.availableCopies }} / {{ selectedBook?.totalCopies }} available)</span
+          >
+        </div>
+        <button class="muted close-btn" type="button" (click)="closeIssueModal()">✕</button>
+      </header>
+
+      <section class="modal-body">
+        <!-- Search + Issue row -->
+        <div class="issue-row">
+          <input
+            #searchBox
+            type="text"
+            class="search-input"
+            placeholder="Search users by name/email/phone…"
+            [value]="userSearchTerm"
+            (input)="onUserSearchInput(searchBox.value)"
+          />
+
+          <button
+            class="primary"
+            type="button"
+            [disabled]="!selectedUserId || issuing || (selectedBook?.availableCopies ?? 0) <= 0"
+            (click)="issueSelectedBook()"
+            title="Issue book to selected user"
+          >
+            {{ issuing ? 'Issuing…' : 'Issue Book' }}
+          </button>
+        </div>
+
+        <!-- Users list -->
+        <div class="users-list" *ngIf="users?.length ?? 0; else noUsers">
+          <button
+            type="button"
+            class="user-item"
+            *ngFor="let u of users"
+            [class.selected]="selectedUserId === u.id"
+            (click)="selectUser(u)"
+            title="Select user"
+          >
+            <div class="user-main">
+              <span class="user-name">{{ u.userName }}</span>
+              <span class="user-email muted">{{ u.email }}</span>
+            </div>
+            <div class="user-meta muted">{{ u.phoneNumber }}</div>
+          </button>
+        </div>
+        <ng-template #noUsers>
+          <p class="muted small">Type at least 2 characters to search users.</p>
+        </ng-template>
+
+        <!-- Error -->
+        <p class="error" *ngIf="issueError">{{ issueError }}</p>
+
+        <!-- Info -->
+        <p class="muted small">
+          * Issue date is now; due date is in {{ defaultLoanDays }} days. (Configured in component)
+        </p>
+      </section>
+
+      <footer class="modal-footer">
+        <button class="muted" type="button" (click)="closeIssueModal()">Cancel</button>
+      </footer>
+    </div>
+  </div>
 </div>

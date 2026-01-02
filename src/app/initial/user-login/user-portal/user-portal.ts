@@ -1,73 +1,74 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BrowseBooksComponent } from './browse-books/browse-books';
 
 @Component({
   selector: 'app-user-portal',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    BrowseBooksComponent, // 👈 ADD THIS
+  ],
   templateUrl: './user-portal.html',
-  styleUrl: './user-portal.css',
-  standalone: true
+  styleUrls: ['./user-portal.css'],
 })
-export class UserPortal {
+export class UserPortal implements OnInit {
   // Simple variables for a fresher
   selectedMenu = 'dashboard';
   selectedSubMenu = 'books-search';
   sidebarOpen = true;
   searchText = '';
-  
+
   // Dropdown states
   booksDropdownOpen = false;
   accountDropdownOpen = false;
-  
+
   // User info
-  userName = 'John Doe';
-  userEmail = 'user@symple';
-  userPhone = '+91 ********';
-  
+  userName = '';
+  userEmail = '';
+  userPhone = '';
+  userRole = '';
+
   // Simple menu list with dropdowns
   menus = [
-    { 
-      name: 'browse-books', 
+    {
+      name: 'browse-books',
       title: 'Browse Books',
-      hasDropdown: true,
-      subMenus: [
-        { name: 'books-search', title: 'Search Books' },
-        { name: 'books-categories', title: 'Categories' },
-        { name: 'books-new', title: 'New Arrivals' },
-        { name: 'books-popular', title: 'Popular Books' }
-      ]
-    },
-    { 
-      name: 'my-account', 
-      title: 'My Account',
-      hasDropdown: true,
-      subMenus: [
-        { name: 'account-profile', title: 'My Profile' },
-        { name: 'account-borrowed', title: 'Borrowed Books' },
-        { name: 'account-history', title: 'Reading History' },
-        { name: 'account-settings', title: 'Settings' }
-      ]
     },
     { name: 'history', title: 'History', hasDropdown: false },
-    { name: 'wishlist', title: 'Wishlist', hasDropdown: false },
-    { name: 'notifications', title: 'Notifications', hasDropdown: false }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedAccount = localStorage.getItem('account');
+
+      if (!storedAccount) {
+        this.router.navigate(['/user-login']);
+
+        return;
+      }
+
+      const account = JSON.parse(storedAccount);
+
+      this.userName = account.userName;
+
+      this.userEmail = account.email;
+
+      this.userPhone = account.phoneNumber ?? '';
+      // this.userRole = account.role;
+      this.userRole = account.role === 1 ? 'Admin' : 'User';
+    }
+  }
 
   // Simple function to change menu
   changeMenu(menuName: string) {
     this.selectedMenu = menuName;
-    
-    // Close all dropdowns when selecting a different menu
-    if (menuName !== 'browse-books') {
-      this.booksDropdownOpen = false;
-    }
-    if (menuName !== 'my-account') {
-      this.accountDropdownOpen = false;
-    }
   }
 
   // Simple function to toggle dropdowns
@@ -105,29 +106,27 @@ export class UserPortal {
 
   // Simple function to logout
   logout() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('account');
+    }
+
     this.router.navigate(['/user-login']);
   }
 
   // Simple function to get current page title
-  getCurrentTitle() {
-    // Check if we have a submenu selected
-    if (this.selectedMenu === 'browse-books' || this.selectedMenu === 'my-account') {
-      for (let menu of this.menus) {
-        if (menu.name === this.selectedMenu && menu.subMenus) {
-          for (let subMenu of menu.subMenus) {
-            if (subMenu.name === this.selectedSubMenu) {
-              return subMenu.title;
-            }
-          }
-        }
-      }
-    }
-    
-    // Default menu title
+  getCurrentTitle(): string {
     if (this.selectedMenu === 'dashboard') {
       return 'Dashboard';
     }
-    
+
+    if (this.selectedMenu === 'browse-books') {
+      return 'Browse Books';
+    }
+
+    if (this.selectedMenu === 'history') {
+      return 'History';
+    }
+
     for (let menu of this.menus) {
       if (menu.name === this.selectedMenu) {
         return menu.title;

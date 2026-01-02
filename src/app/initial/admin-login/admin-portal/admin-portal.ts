@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +13,7 @@ import { ManageUsersComponent } from './manage-users/manage-users';
   styleUrl: './admin-portal.css',
   standalone: true,
 })
-export class AdminPortal {
+export class AdminPortal implements OnInit {
   // Simple variables for a fresher
   selectedMenu = 'dashboard';
   selectedSubMenu = 'books-add';
@@ -24,9 +25,10 @@ export class AdminPortal {
   usersDropdownOpen = false;
 
   // Admin user info
-  adminName = 'Admin User';
-  adminEmail = 'admin@Symplr';
-  adminPhone = '+91 ********';
+  adminName = '';
+  adminEmail = '';
+  adminPhone = '';
+  adminRole = '';
 
   // Simple menu list with dropdowns
   menus = [
@@ -57,7 +59,25 @@ export class AdminPortal {
     { name: 'settings', title: 'Settings', hasDropdown: false },
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedAccount = localStorage.getItem('account');
+
+      if (!storedAccount) {
+        this.router.navigate(['/admin-login']);
+        return;
+      }
+
+      const account = JSON.parse(storedAccount);
+
+      this.adminName = account.userName;
+      this.adminEmail = account.email;
+      this.adminPhone = account.phoneNumber ?? '';
+      this.adminRole = account.role === 1 ? 'Admin' : 'User';
+    }
+  }
 
   // Simple function to change menu
   changeMenu(menuName: string) {
@@ -107,6 +127,10 @@ export class AdminPortal {
 
   // Simple function to logout
   logout() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('account');
+    }
+
     this.router.navigate(['/admin-login']);
   }
 

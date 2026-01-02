@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { finalize, filter } from 'rxjs/operators';
+import { FinesService } from '../../../../Services/Fines.Services';
+import { FineLoan, LoanDto } from '../../../../Models/Fines';
 
 @Component({
   selector: 'app-manage-users',
@@ -20,6 +22,24 @@ import { finalize, filter } from 'rxjs/operators';
   imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
 })
 export class ManageUsersComponent implements OnInit {
+  selectedUser: { id: number; userName: string } | null = null;
+  showLoansPanel = false;
+  // selectedLoans: Array<{
+  //   id: number;
+  //   userId: number;
+  //   userName?: string;
+  //   bookId: number;
+  //   title?: string;
+  //   issueDate: string;
+  //   dueDate: string;
+  //   returnDate?: string | null;
+  //   fineAmount: number;
+  //   paymentStatus: boolean;
+  // }> = [];
+  selectedLoans: LoanDto[] = [];
+
+  // *ngFor track function for loans (ADD THIS)
+  trackLoan = (_: number, l: any) => l.id;
   // Stream-based state
   accounts$ = new BehaviorSubject<Account[]>([]);
   loading = false;
@@ -41,6 +61,35 @@ export class ManageUsersComponent implements OnInit {
     // isActive optional
   };
 
+  constructor(
+    private readonly service: AccountsService,
+    private readonly router: Router,
+    private readonly cdr: ChangeDetectorRef,
+    private finesService: FinesService
+  ) {}
+
+  openLoans(user: any) {
+    this.selectedUser = user;
+    this.showLoansPanel = true;
+
+    // optional: add small loading flag if you want
+    // (you already have 'loading' for accounts list)
+    this.selectedLoans = [];
+    this.error = '';
+
+    this.finesService.getLoans({ userId: user.id }).subscribe({
+      next: (data) => {
+        // data shape comes from FinesController /loans endpoint
+        this.selectedLoans = data ?? [];
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading loans', err);
+        this.error = err?.error?.message ?? 'Failed to load loans.';
+      },
+    });
+  }
+
   // Edit state
   editId: number | null = null;
   editModel: AccountUpdateDto = {
@@ -55,11 +104,13 @@ export class ManageUsersComponent implements OnInit {
   // Expose enum to template (optional)
   AccountRole = AccountRole;
 
-  constructor(
-    private readonly service: AccountsService,
-    private readonly router: Router,
-    private readonly cdr: ChangeDetectorRef
-  ) {}
+  viewUserLoans(acc: Account): void {
+    this.router.navigate(['/user-loans'], {
+      queryParams: {
+        userId: acc.id,
+      },
+    });
+  }
 
   ngOnInit(): void {
     this.load();
