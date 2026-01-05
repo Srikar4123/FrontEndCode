@@ -93,7 +93,7 @@
 
       <!-- Other Menu Items (No Dropdown) -->
       <div class="menu-group">
-        <div class="menu-item">
+        <div class="menu-item" routerLink="/reports">
           <div class="menu-icon">
             <span class="material-symbols-outlined">analytics</span>
           </div>
@@ -216,11 +216,12 @@
       <div *ngIf="selectedMenu === 'reports'" class="page">
         <h2>Reports</h2>
         <p>View library statistics and reports.</p>
-        <div class="simple-card">
+        <!-- <div class="simple-card">
           <h4>Monthly Report</h4>
           <p>Books borrowed: 1,200</p>
           <p>New users: 45</p>
-        </div>
+        </div> -->
+        <app-reports></app-reports>
       </div>
 
       <!-- Settings Page -->

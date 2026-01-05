@@ -1,0 +1,72 @@
+.user-loans-container {
+    padding: 16px;
+    background: #f9fafb;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* Table */
+.loans-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.loans-table th,
+.loans-table td {
+    border: 1px solid #e5e7eb;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.loans-table th {
+    background: #f1f5f9;
+}
+
+/* Status */
+.status {
+    margin-bottom: 10px;
+}
+
+.error {
+    color: #dc2626;
+    margin-bottom: 10px;
+}
+
+.muted {
+    text-align: center;
+    color: #6b7280;
+}
+
+/* Badges */
+.badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge.paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge.unpaid {
+    background: #fee2e2;
+    color: #991b1b;
+}

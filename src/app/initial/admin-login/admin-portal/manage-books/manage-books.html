@@ -2,6 +2,24 @@
   <!-- Top toolbar -->
   <div class="mb-toolbar">
     <h3 class="mb-title">Manage Books</h3>
+    <!-- <input
+    type="text"
+    class="search-input"
+    placeholder="Search books..."
+    [(ngModel)]="searchTerm"
+    (input)="applySearch()"
+  /> -->
+
+    <div class="search-wrapper">
+      <span class="material-symbols-outlined search-icon">search</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search books..."
+        [(ngModel)]="searchTerm"
+        (input)="applySearch()"
+      />
+    </div>
 
     <div class="mb-actions">
       <!-- Filter popover -->
@@ -12,7 +30,8 @@
         <div class="filter-panel">
           <label for="genre">Genre</label>
           <select id="genre" [value]="genre" (change)="onGenreChange($event)">
-            <option *ngFor="let g of genresPreset" [value]="g">{{ g }}</option>
+            <!-- <option *ngFor="let g of genresPreset" [value]="g">{{ g }}</option> -->
+            <option *ngFor="let g of genres" [value]="g">{{ g }}</option>
           </select>
           <div class="filter-actions">
             <button class="muted" type="button" (click)="clearFilter()">Clear</button>
@@ -135,7 +154,7 @@
     <ng-container *ngIf="!loading && (books?.length ?? 0); else noBooks">
       <article
         class="product-card"
-        *ngFor="let b of books; trackBy: trackById"
+        *ngFor="let b of filteredBooks; trackBy: trackById"
         tabindex="0"
         aria-label="Open issue modal"
       >
@@ -228,9 +247,9 @@
           </form>
         </div>
       </article>
-      <!--issueee-->
+      <!-- issueee -->
       <!-- Issue modal -->
-      <div
+      <!-- <div
         class="modal-overlay"
         *ngIf="issueModalOpen"
         (click)="closeIssueModal()"
@@ -248,10 +267,10 @@
             </div>
             <button class="muted close-btn" type="button" (click)="closeIssueModal()">✕</button>
           </header>
-
+ 
           <section class="modal-body">
             <!-- Search + Issue row -->
-            <div class="issue-row">
+      <!-- <div class="issue-row">
               <input
                 #searchBox
                 type="text"
@@ -259,9 +278,9 @@
                 placeholder="Search users by name/email/phone…"
                 [value]="userSearchTerm"
                 (input)="onUserSearchInput(searchBox.value)"
-              />
+              /> -->
 
-              <button
+      <!-- <button
                 class="primary"
                 type="button"
                 [disabled]="!selectedUserId || issuing || (selectedBook?.availableCopies ?? 0) <= 0"
@@ -270,10 +289,10 @@
               >
                 {{ issuing ? 'Issuing…' : 'Issue Book' }}
               </button>
-            </div>
+            </div> -->
 
-            <!-- Users list -->
-            <div class="users-list" *ngIf="(users?.length ?? 0) > 0; else noUsers">
+      <!-- Users list -->
+      <!-- <div class="users-list" *ngIf="(users?.length ?? 0) > 0; else noUsers">
               <button
                 type="button"
                 class="user-item"
@@ -291,23 +310,23 @@
             </div>
             <ng-template #noUsers>
               <p class="muted small">Type at least 2 characters to search users.</p>
-            </ng-template>
+            </ng-template> -->
 
-            <!-- Error -->
-            <p class="error" *ngIf="issueError">{{ issueError }}</p>
+      <!-- Error -->
+      <!-- <p class="error" *ngIf="issueError">{{ issueError }}</p> -->
 
-            <!-- Info -->
-            <p class="muted small">
+      <!-- Info -->
+      <!-- <p class="muted small">
               * Issue date is now; due date is in {{ defaultLoanDays }} days. (Configured in
               component)
             </p>
-          </section>
+          </section> -->
 
-          <footer class="modal-footer">
+      <!-- <footer class="modal-footer">
             <button class="muted" type="button" (click)="closeIssueModal()">Cancel</button>
           </footer>
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
     </ng-container>
 
     <ng-template #noBooks>

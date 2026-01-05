@@ -688,9 +688,9 @@ button.danger:hover {
 }
 
 /* ===========================
-
+ 
    Issue Book Button Styling
-
+ 
 =========================== */
 
 .issue-btn {
@@ -743,4 +743,42 @@ button.danger:hover {
 
     box-shadow: none;
 
+}
+
+.mb-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.search-wrapper {
+    position: relative;
+    margin-left: 50px;
+    /* 👈 moves it slightly right */
+    max-width: 300px;
+    /* 👈 smaller box */
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    height: 36px;
+    /* 👈 thinner box */
+    padding: 6px 10px 6px 34px;
+    /* 👈 less vertical padding */
+    border-radius: 8px;
+    /* slightly tighter corners */
+    border: 1.5px solid #111;
+    font-size: 13px;
+    /* slightly smaller text */
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    /* smaller icon */
+    color: #666;
 }
