@@ -1,10 +1,14 @@
 <section class="user-loans-container">
   <header class="header">
     <h2>My Loans</h2>
-    <span class="subtitle" *ngIf="userName">
-      {{ userName }}
-    </span>
+    <b>
+      <span class="subtitle" *ngIf="userName">
+        {{ userName }}
+      </span>
+    </b>
   </header>
+
+  <br /><br /><br />
 
   <div class="status" *ngIf="loading">Loading loans...</div>
   <div class="error" *ngIf="error">{{ error }}</div>
