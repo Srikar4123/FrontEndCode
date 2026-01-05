@@ -62,8 +62,8 @@ export class AdminPortal implements OnInit {
       ],
     },
     { name: 'history', title: 'History', hasDropdown: false },
-    { name: 'reports', title: 'Reports', hasDropdown: false },
-    { name: 'settings', title: 'Settings', hasDropdown: false },
+    // { name: 'reports', title: 'Reports', hasDropdown: false },
+    // { name: 'settings', title: 'Settings', hasDropdown: false },
   ];
 
   constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
@@ -110,6 +110,12 @@ export class AdminPortal implements OnInit {
     // this.usersDropdownOpen = !this.usersDropdownOpen;
     // this.booksDropdownOpen = false; // Close other dropdown
     this.selectedMenu = 'manage-users';
+  }
+
+  toggleReports() {
+    // this.usersDropdownOpen = !this.usersDropdownOpen;
+    // this.booksDropdownOpen = false; // Close other dropdown
+    this.selectedMenu = 'reports';
   }
 
   // Simple function to select sub menu

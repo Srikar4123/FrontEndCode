@@ -91,15 +91,44 @@
         </div> -->
       </div>
 
-      <!-- Other Menu Items (No Dropdown) -->
       <div class="menu-group">
+        <div
+          class="menu-item"
+          [class.active]="selectedMenu === 'reports'"
+          (click)="toggleReports()"
+        >
+          <div class="menu-icon">
+            <span class="material-symbols-outlined">analytics</span>
+          </div>
+          <span class="menu-text">Reports</span>
+          <!-- <span class="dropdown-arrow">
+            {{ usersDropdownOpen ? '▼' : '▶' }}
+          </span> -->
+        </div>
+
+        <!-- Users Dropdown -->
+        <!-- <div class="dropdown-menu" *ngIf="usersDropdownOpen">
+          <div
+            class="dropdown-item"
+            *ngFor="let subMenu of menus[1].subMenus"
+            [class.active]="selectedSubMenu === subMenu.name"
+            (click)="selectSubMenu(subMenu.name)"
+          >
+            <span class="sub-icon">•</span>
+            <span>{{ subMenu.title }}</span>
+          </div>
+        </div> -->
+      </div>
+
+      <!-- Other Menu Items (No Dropdown) -->
+      <!-- <div class="menu-group">
         <div class="menu-item" routerLink="/reports">
           <div class="menu-icon">
             <span class="material-symbols-outlined">analytics</span>
           </div>
           <span class="menu-text">Reports</span>
         </div>
-      </div>
+      </div> -->
 
       <!-- Logout Button -->
       <div class="menu-item logout-item" (click)="logout()">

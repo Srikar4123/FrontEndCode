@@ -44,13 +44,42 @@
       </div>
 
       <!-- History -->
-      <div class="menu-item" routerLink="/history" routerLinkActive="active">
+      <!-- <div class="menu-item" routerLink="/history" routerLinkActive="active">
         <div class="menu-icon">
           <span class="material-symbols-outlined">history</span>
         </div>
         <span class="menu-text">History</span>
       </div>
-      <router-outlet></router-outlet>
+      <router-outlet></router-outlet> -->
+
+      <div class="menu-group">
+        <div
+          class="menu-item"
+          [class.active]="selectedMenu === 'history'"
+          (click)="toggleHistory()"
+        >
+          <div class="menu-icon">
+            <span class="material-symbols-outlined">history</span>
+          </div>
+          <span class="menu-text">History</span>
+          <!-- <span class="dropdown-arrow">
+            {{ usersDropdownOpen ? '▼' : '▶' }}
+          </span> -->
+        </div>
+
+        <!-- Users Dropdown -->
+        <!-- <div class="dropdown-menu" *ngIf="usersDropdownOpen">
+          <div
+            class="dropdown-item"
+            *ngFor="let subMenu of menus[1].subMenus"
+            [class.active]="selectedSubMenu === subMenu.name"
+            (click)="selectSubMenu(subMenu.name)"
+          >
+            <span class="sub-icon">•</span>
+            <span>{{ subMenu.title }}</span>
+          </div>
+        </div> -->
+      </div>
 
       <!-- Logout -->
       <div class="menu-item logout-item" (click)="logout()">
@@ -100,24 +129,13 @@
         </div>
       </div>
 
-      <!-- Browse Books -->
-      <!-- <div *ngIf="selectedMenu === 'browse-books'" class="page">
-        <app-browse-books></app-browse-books>
-      </div> -->
-
       <div class="page" [hidden]="selectedMenu !== 'browse-books'">
         <app-browse-books></app-browse-books>
       </div>
 
-      <!-- History -->
-      <div *ngIf="selectedMenu === 'history'" class="page">
-        <h2>Borrow History</h2>
-        <p>All your borrowed and returned books will appear here.</p>
-        <!-- (Later you can reuse getLoans(userId) here) -->
-      </div>
-      <!-- <div class="page" [hidden]="selectedMenu !== 'history'">
+      <div class="page" [hidden]="selectedMenu !== 'history'">
         <app-history></app-history>
-      </div> -->
+      </div>
     </div>
   </div>
 </div>
