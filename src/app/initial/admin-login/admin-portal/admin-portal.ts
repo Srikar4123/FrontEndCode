@@ -5,10 +5,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ManageBooksComponent } from './manage-books/manage-books';
 import { ManageUsersComponent } from './manage-users/manage-users';
+import { ReportsComponent } from './reports/reports';
 
 @Component({
   selector: 'app-admin-portal',
-  imports: [CommonModule, FormsModule, ManageBooksComponent, ManageUsersComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ManageBooksComponent,
+    ManageUsersComponent,
+    ReportsComponent,
+  ],
   templateUrl: './admin-portal.html',
   styleUrl: './admin-portal.css',
   standalone: true,

@@ -1,3 +1,5 @@
+browsebooks.html
+
 <div class="manage-books-container">
   <!-- ================= TOP BAR ================= -->
   <div class="mb-toolbar">
@@ -13,7 +15,8 @@
         <div class="filter-panel">
           <label for="genre">Genre</label>
           <select id="genre" [value]="genre" (change)="onGenreChange($event)">
-            <option *ngFor="let g of genresPreset" [value]="g">{{ g }}</option>
+            <!-- <option *ngFor="let g of genresPreset" [value]="g">{{ g }}</option> -->
+            <option *ngFor="let g of genres" [value]="g">{{ g }}</option>
           </select>
 
           <div class="filter-actions">
@@ -42,7 +45,13 @@
     [style.gap.px]="14"
   >
     <ng-container *ngIf="filteredBooks.length > 0; else noBooks">
+      <!-- <ng-container *ngIf="books.length > 0; else noBooks"> -->
+
       <article class="product-card" *ngFor="let b of filteredBooks; trackBy: trackById">
+        <!-- <article
+  class="product-card"
+  *ngFor="let b of (filteredBooks.length ? filteredBooks : books); trackBy: trackById"> -->
+
         <!-- Book Image -->
         <div class="thumb">
           <img
@@ -85,10 +94,19 @@
           <!-- ✅ BORROW (if THIS USER has NOT borrowed AND copies exist) -->
           <button
             class="primary"
-            *ngIf="!getMyActiveLoan(b.id) && b.availableCopies > 0"
+            *ngIf="!getMyActiveLoan(b.id) && b.availableCopies > 0 && canBorrowMore()"
             (click)="borrow(b)"
           >
             Borrow
+          </button>
+
+          <!-- 🚫 BORROW DISABLED (limit reached) -->
+          <button
+            class="muted"
+            *ngIf="!getMyActiveLoan(b.id) && b.availableCopies > 0 && !canBorrowMore()"
+            disabled
+          >
+            Borrow limit reached
           </button>
 
           <!-- ✅ UNAVAILABLE (ONLY when copies are zero) -->

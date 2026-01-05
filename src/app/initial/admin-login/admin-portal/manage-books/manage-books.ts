@@ -40,15 +40,28 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
 
   // Filter
   genre = 'All';
-  genresPreset: string[] = [
-    'All',
-    'Fiction',
-    'Non-Fiction',
-    'Mystery',
-    'Fantasy',
-    'Sci-Fi',
-    'Biography',
-  ];
+  genres: string[] = ['All'];
+  searchTerm = '';
+  filteredBooks: Books[] = [];
+  //   selectedYearRange = 'All';
+
+  //   yearRanges = [
+  //   { label: 'All', value: 'All' },
+  //   { label: 'Below 2000', value: 'below-2000' },
+  //   { label: '2000 - 2009', value: '2000-2009' },
+  //   { label: '2010 - 2019', value: '2010-2019' },
+  //   { label: '2020 - Present', value: '2020-present' },
+  // ];
+
+  // genresPreset: string[] = [
+  //   'All',
+  //   'Fiction',
+  //   'Non-Fiction',
+  //   'Mystery',
+  //   'Fantasy',
+  //   'Sci-Fi',
+  //   'Biography',
+  // ];
 
   // Create
   showCreate = false;
@@ -126,6 +139,34 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     setTimeout(() => this.load(), 0);
   }
 
+  private buildGenresFromBooks(): void {
+    const uniqueGenres = new Set<string>();
+
+    this.books.forEach((b) => {
+      if (b.genre && b.genre.trim().length > 0) {
+        uniqueGenres.add(b.genre.trim());
+      }
+    });
+
+    this.genres = ['All', ...Array.from(uniqueGenres).sort()];
+  }
+
+  applySearch(): void {
+    const q = this.searchTerm.trim().toLowerCase();
+
+    if (!q) {
+      this.filteredBooks = [...this.books];
+      return;
+    }
+
+    this.filteredBooks = this.books.filter(
+      (b) =>
+        b.title?.toLowerCase().includes(q) ||
+        b.author?.toLowerCase().includes(q) ||
+        b.genre?.toLowerCase().includes(q)
+    );
+  }
+
   /** Cross-field validator: availableCopies <= totalCopies */
   availableNotExceedTotal(group: AbstractControl): ValidationErrors | null {
     const total = Number(group.get('totalCopies')?.value ?? 0);
@@ -140,9 +181,13 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     this.booksService.getAll(filter).subscribe({
       next: (res) => {
         this.books = res;
+        this.buildGenresFromBooks();
+        this.filteredBooks = [...this.books];
         this.loading = false;
       },
       error: () => {
+        this.books = [];
+        this.filteredBooks = [];
         this.loading = false;
       },
     });
@@ -240,6 +285,7 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
           publishedYear: '',
         });
         this.books = [created, ...this.books];
+        this.buildGenresFromBooks();
       },
       error: (err) => alert(err?.error?.message ?? 'Add failed'),
     });
@@ -396,7 +442,6 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
         );
 
         this.selectedBook!.availableCopies = res.availableCopies;
-
         alert('Book issued successfully');
 
         this.closeIssueModal();

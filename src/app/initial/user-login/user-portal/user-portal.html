@@ -44,16 +44,13 @@
       </div>
 
       <!-- History -->
-      <div
-        class="menu-item"
-        [class.active]="selectedMenu === 'history'"
-        (click)="changeMenu('history')"
-      >
+      <div class="menu-item" routerLink="/history" routerLinkActive="active">
         <div class="menu-icon">
           <span class="material-symbols-outlined">history</span>
         </div>
         <span class="menu-text">History</span>
       </div>
+      <router-outlet></router-outlet>
 
       <!-- Logout -->
       <div class="menu-item logout-item" (click)="logout()">
@@ -104,7 +101,11 @@
       </div>
 
       <!-- Browse Books -->
-      <div *ngIf="selectedMenu === 'browse-books'" class="page">
+      <!-- <div *ngIf="selectedMenu === 'browse-books'" class="page">
+        <app-browse-books></app-browse-books>
+      </div> -->
+
+      <div class="page" [hidden]="selectedMenu !== 'browse-books'">
         <app-browse-books></app-browse-books>
       </div>
 
@@ -114,6 +115,9 @@
         <p>All your borrowed and returned books will appear here.</p>
         <!-- (Later you can reuse getLoans(userId) here) -->
       </div>
+      <!-- <div class="page" [hidden]="selectedMenu !== 'history'">
+        <app-history></app-history>
+      </div> -->
     </div>
   </div>
 </div>

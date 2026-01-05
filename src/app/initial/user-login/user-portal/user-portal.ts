@@ -1,18 +1,15 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowseBooksComponent } from './browse-books/browse-books';
+// import { HistoryComponent } from './history/history';
 
 @Component({
   selector: 'app-user-portal',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    BrowseBooksComponent, // 👈 ADD THIS
-  ],
+  imports: [CommonModule, FormsModule, BrowseBooksComponent, RouterOutlet],
   templateUrl: './user-portal.html',
   styleUrls: ['./user-portal.css'],
 })
@@ -69,6 +66,9 @@ export class UserPortal implements OnInit {
   // Simple function to change menu
   changeMenu(menuName: string) {
     this.selectedMenu = menuName;
+    if (menuName === 'history') {
+      this.router.navigate(['/history']);
+    }
   }
 
   // Simple function to toggle dropdowns

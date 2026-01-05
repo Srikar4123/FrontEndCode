@@ -1,0 +1,51 @@
+<section class="user-loans-container">
+  <header class="header">
+    <h2>My Loans</h2>
+    <span class="subtitle" *ngIf="userName">
+      {{ userName }}
+    </span>
+  </header>
+
+  <div class="status" *ngIf="loading">Loading loans...</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <table class="loans-table" *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>Book ID</th>
+        <th>Title</th>
+        <th>Issue Date</th>
+        <th>Due Date</th>
+        <th>Return Date</th>
+        <th>Fine</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let loan of loans; trackBy: trackLoan">
+        <td>{{ loan.bookId }}</td>
+        <td>{{ loan.title || '—' }}</td>
+        <td>{{ loan.issueDate | date : 'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ loan.dueDate | date : 'yyyy-MM-dd HH:mm' }}</td>
+        <td>
+          {{ loan.returnDate ? (loan.returnDate | date : 'yyyy-MM-dd HH:mm') : '—' }}
+        </td>
+        <td>₹ {{ loan.fineAmount }}</td>
+        <td>
+          <span
+            class="badge"
+            [class.paid]="loan.paymentStatus"
+            [class.unpaid]="!loan.paymentStatus"
+          >
+            {{ loan.paymentStatus ? 'Paid' : 'Unpaid' }}
+          </span>
+        </td>
+      </tr>
+
+      <tr *ngIf="loans.length === 0 && !loading">
+        <td colspan="7" class="muted">You currently have no loans.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
