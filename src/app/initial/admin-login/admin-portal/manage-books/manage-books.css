@@ -782,3 +782,25 @@ button.danger:hover {
     /* smaller icon */
     color: #666;
 }
+
+ /* ===========================
+   Year Filter (same as Genre)
+   =========================== */
+
+ /* No new visuals — reuse existing filter-pop styles */
+ .mb-actions .filter-pop {
+     display: inline-flex;
+     align-items: center;
+ }
+
+ /* Ensure Year dropdown aligns nicely beside Genre */
+ .mb-actions .filter-pop>summary {
+     min-width: 90px;
+     /* same visual weight as Genre */
+     justify-content: center;
+ }
+
+ /* Keep Year dropdown panel aligned correctly */
+ .mb-actions .filter-pop[open]>.filter-panel {
+     right: 0;
+ }

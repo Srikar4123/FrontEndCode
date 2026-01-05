@@ -43,15 +43,14 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
   genres: string[] = ['All'];
   searchTerm = '';
   filteredBooks: Books[] = [];
-  //   selectedYearRange = 'All';
-
-  //   yearRanges = [
-  //   { label: 'All', value: 'All' },
-  //   { label: 'Below 2000', value: 'below-2000' },
-  //   { label: '2000 - 2009', value: '2000-2009' },
-  //   { label: '2010 - 2019', value: '2010-2019' },
-  //   { label: '2020 - Present', value: '2020-present' },
-  // ];
+  selectedYearRange = 'All';
+  yearRanges = [
+    { label: 'All', value: 'All' },
+    { label: 'Below 2000', value: 'Below - 2000' },
+    { label: '2000 - 2009', value: '2000 - 2009' },
+    { label: '2010 - 2019', value: '2010 - 2019' },
+    { label: '2020 - Present', value: '2020 - Present' },
+  ];
 
   // genresPreset: string[] = [
   //   'All',
@@ -75,6 +74,7 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
 
   // reference to the filter popover in HTML:
   @ViewChild('filterDetails') filterDetails?: ElementRef;
+  @ViewChild('yearFilter') yearFilter?: ElementRef;
 
   // =========================
   // NEW: Issue modal state
@@ -151,6 +151,27 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     this.genres = ['All', ...Array.from(uniqueGenres).sort()];
   }
 
+  private matchesYearRange(bookYear: string | null | undefined): boolean {
+    if (this.selectedYearRange === 'All') return true;
+    if (!bookYear) return false;
+
+    const year = Number(bookYear);
+    if (isNaN(year)) return false;
+
+    switch (this.selectedYearRange) {
+      case 'Below - 2000':
+        return year < 2000;
+      case '2000 - 2009':
+        return year >= 2000 && year <= 2009;
+      case '2010 - 2019':
+        return year >= 2010 && year <= 2019;
+      case '2020 - Present':
+        return year >= 2020;
+      default:
+        return true;
+    }
+  }
+
   applySearch(): void {
     const q = this.searchTerm.trim().toLowerCase();
 
@@ -183,6 +204,9 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
         this.books = res;
         this.buildGenresFromBooks();
         this.filteredBooks = [...this.books];
+        this.filteredBooks = this.filteredBooks.filter((b) =>
+          this.matchesYearRange(b.publishedYear)
+        );
         this.loading = false;
       },
       error: () => {
@@ -200,6 +224,7 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
 
   clearFilter(): void {
     this.genre = 'All';
+    this.selectedYearRange = 'All';
     this.load();
     this.closeFilterPanel();
   }
@@ -209,9 +234,19 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     this.genre = value;
   }
 
+  onYearChange(event: Event): void {
+    this.selectedYearRange = (event.target as HTMLSelectElement).value;
+  }
+
   private closeFilterPanel(): void {
     if (this.filterDetails?.nativeElement?.open) {
       this.filterDetails.nativeElement.open = false;
+    }
+  }
+
+  closeYearFilter(): void {
+    if (this.yearFilter?.nativeElement?.open) {
+      this.yearFilter.nativeElement.open = false;
     }
   }
 

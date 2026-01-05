@@ -23,6 +23,27 @@
 
     <div class="mb-actions">
       <!-- Filter popover -->
+      <!-- Filter popover -->
+      <!-- ================= YEAR FILTER ================= -->
+      <details class="filter-pop" #yearFilter>
+        <summary>
+          <span>Year {{ selectedYearRange }}</span>
+        </summary>
+
+        <div class="filter-panel">
+          <label>Published Year</label>
+
+          <select [value]="selectedYearRange" (change)="onYearChange($event)">
+            <option *ngFor="let y of yearRanges" [value]="y.value">
+              {{ y.label }}
+            </option>
+          </select>
+
+          <div class="filter-actions">
+            <button class="primary" type="button" (click)="load(); closeYearFilter()">Apply</button>
+          </div>
+        </div>
+      </details>
       <details class="filter-pop" #filterDetails (click)="onFilterSummaryClick($event)">
         <summary>
           <span>Genre {{ genre }}</span>
