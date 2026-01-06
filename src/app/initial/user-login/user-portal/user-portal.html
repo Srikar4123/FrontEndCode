@@ -5,15 +5,27 @@
     <div class="user-profile">
       <div class="profile-pic">
         <img
-          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+          src="https://static.vecteezy.com/system/resources/previews/009/749/643/large_2x/woman-profile-mascot-illustration-female-avatar-character-icon-cartoon-girl-head-face-business-user-logo-free-vector.jpg"
           alt="User"
         />
       </div>
       <div class="user-info" *ngIf="sidebarOpen">
         <h3>{{ userName }}</h3>
-        <p>{{ userPhone }}</p>
-        <p class="email">{{ userEmail }}</p>
-        <p class="role">{{ userRole }}</p>
+        <p class="info-row">
+          <span class="material-symbols-outlined info-icon phone-icon">call</span>
+          {{ userPhone }}
+        </p>
+
+        <!-- <p class="email">{{ userEmail }}</p> -->
+        <p class="info-row">
+          <span class="material-symbols-outlined info-icon email-icon">mail</span>
+          {{ userEmail }}
+        </p>
+        <!-- <p class="role">{{ userRole }}</p> -->
+        <p class="info-row role">
+          <span class="material-symbols-outlined info-icon role-icon">info</span>
+          {{ userRole }}
+        </p>
       </div>
     </div>
 

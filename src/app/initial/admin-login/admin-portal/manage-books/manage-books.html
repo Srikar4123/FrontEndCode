@@ -108,7 +108,7 @@
       </label>
 
       <label>
-        Price ($) *
+        Price (₹) *
         <input type="number" formControlName="price" />
         <span class="error" *ngIf="createForm.get('price')?.hasError('min')"
           >Price cannot be negative.</span
@@ -202,7 +202,7 @@
             }}
           </p>
 
-          <div class="price">$ {{ b.price | number : '1.2-2' }}</div>
+          <div class="price">₹ {{ b.price | number : '1.2-2' }}</div>
           <div class="availability">Available: {{ b.availableCopies }} / {{ b.totalCopies }}</div>
           <div class="published-year">Year: {{ b.publishedYear || '—' }}</div>
         </div>
@@ -235,7 +235,7 @@
               <input type="text" formControlName="genre" />
             </label>
             <label>
-              Price ($) *
+              Price (₹) *
               <input type="number" formControlName="price" />
             </label>
             <label>
