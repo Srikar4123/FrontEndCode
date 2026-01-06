@@ -1,174 +1,339 @@
-<div class="init-cont">
-  <!-- Welcome Section -->
-  <section class="welcome-section">
-    <div class="main-container-box">
-      <!-- Library Icon Section -->
-      <div class="library-section">
-        <div class="library-icon-wrapper">
-          <svg
-            class="library-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M4 6H2V20C2 21.1 2.9 22 4 22H18V20H4V6Z" fill="currentColor" />
-            <path
-              d="M20 2H8C6.9 2 6 2.9 6 4V16C6 17.1 6.9 18 8 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H8V4H20V16Z"
-              fill="currentColor"
-            />
-            <path
-              d="M12 5H10V7H12V5ZM14 5H16V7H14V5ZM10 8H12V10H10V8ZM14 8H16V10H14V8ZM10 11H12V13H10V11ZM14 11H16V13H14V11Z"
-              fill="currentColor"
-            />
-          </svg>
+<div class="auth-modal-overlay" *ngIf="showAuthModal" (click)="closeAuthModal()">
+  <div class="auth-modal" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <button class="close-btn" (click)="closeAuthModal()">×</button>
+
+    <!-- LOGIN SECTION -->
+    <section class="login-section">
+      <div class="login-container-box">
+        <h2>Welcome Back</h2>
+        <p class="login-subtitle">Choose your role to continue</p>
+
+        <div class="icon-buttons-container">
+          <!-- User Login Button -->
+          <div class="icon-button-wrapper">
+            <button class="icon-button user-button" (click)="goToUserLogin()">
+              <svg
+                class="button-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+            <span class="button-label">User Login</span>
+          </div>
+
+          <!-- Admin Login Button -->
+          <div class="icon-button-wrapper">
+            <button class="icon-button admin-button" (click)="goToAdminLogin()">
+              <svg
+                class="button-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM12 7C13.1 7 14 7.9 14 9S13.1 11 12 11 10 10.1 10 9 10.9 7 12 7ZM12 17C10.33 17 8.94 16.16 8.24 14.96C8.26 13.71 10.5 13.5 12 13.5S15.74 13.71 15.76 14.96C15.06 16.16 13.67 17 12 17Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+            <span class="button-label">Admin Login</span>
+          </div>
         </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="top-navbar">
+  <div class="nav-container">
+    <!-- Logo / Title -->
+    <div class="nav-logo">
+      <img
+        src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/main/image.jpg"
+        alt="Library Logo"
+        class="nav-logo-img"
+      />
+      <div class="nav-logo-text">
+        <span class="logo-title">LibraryPro</span>
+        <span class="logo-subtitle">Management System</span>
+      </div>
+    </div>
+
+    <!-- Nav Buttons -->
+    <div class="nav-links">
+      <!-- <button class="nav-btn" (click)="goAbout()">About</button> -->
+      <button class="nav-btn" (click)="goContact()">Contact</button>
+      <button class="nav-btn" (click)="openLogin()">Sign In</button>
+    </div>
+  </div>
+</nav>
+
+<!-- About Section - Moved to top -->
+<!-- <section class="about-section" id="about">
+  <div class="about-container">
+    <div class="about-content">
+      <div class="about-text">
+        <h2>About LibraryPro</h2>
+        <p>
+          LibraryPro is a comprehensive digital solution designed to modernize library operations.
+          Our platform combines traditional library management with cutting-edge technology to
+          deliver an efficient, user-friendly experience.
+        </p>
+        <p>
+          With features ranging from automated cataloging to advanced analytics, we help libraries
+          of all sizes optimize their operations, improve user satisfaction, and make informed
+          decisions based on real-time data.
+        </p>
+
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <span class="highlight-icon">✓</span>
+            <span>Cloud-based infrastructure</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">✓</span>
+            <span>24/7 technical support</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">✓</span>
+            <span>Regular updates & maintenance</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-image">
+        <div class="about-card">
+          <h3>Why Choose LibraryPro?</h3>
+          <ul>
+            <li>Intuitive user interface</li>
+            <li>Scalable architecture</li>
+            <li>Comprehensive reporting</li>
+            <li>Mobile-responsive design</li>
+            <li>Data security & backup</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<div class="hero-section">
+  <!-- Hero Content -->
+  <section class="hero-content">
+    <div class="hero-container">
+      <!-- Main Hero Text -->
+      <div class="hero-text">
         <h1>Library Management System</h1>
-        <p class="subtitle">Your Gateway to Knowledge and Learning</p>
-      </div>
-
-      <!-- About Us Section -->
-      <div class="about-us-container">
-        <h2>About Us</h2>
-        <p>
-          Welcome to our comprehensive Library Management System, designed to streamline library
-          operations and enhance user experience. Our platform provides efficient book cataloging,
-          user management, and seamless borrowing processes.
+        <p class="hero-subtitle">
+          Streamline your library operations with our comprehensive digital solution. Manage books,
+          users, and resources efficiently.
         </p>
-        <p>
-          Built with modern technology and user-centric design, we aim to bridge the gap between
-          traditional library services and digital innovation, making knowledge more accessible to
-          everyone.
-        </p>
-      </div>
-    </div>
-  </section>
 
-  <!-- Login Section -->
-  <section class="login-section">
-    <div class="login-container-box">
-      <h2>Choose Your Portal</h2>
-      <p class="login-subtitle">Select your role to access the system</p>
-
-      <!-- Icon Buttons Section -->
-      <div class="icon-buttons-container">
-        <!-- User Login Button -->
-        <div class="icon-button-wrapper">
-          <button class="icon-button user-button" (click)="goToUserLogin()">
-            <svg
-              class="button-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
-                fill="currentColor"
-              />
-              <path
-                d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-          <span class="button-label">User Login</span>
-        </div>
-
-        <!-- Admin Login Button -->
-        <div class="icon-button-wrapper">
-          <button class="icon-button admin-button" (click)="goToAdminLogin()">
-            <svg
-              class="button-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM12 7C13.1 7 14 7.9 14 9S13.1 11 12 11 10 10.1 10 9 10.9 7 12 7ZM12 17C10.33 17 8.94 16.16 8.24 14.96C8.26 13.71 10.5 13.5 12 13.5S15.74 13.71 15.76 14.96C15.06 16.16 13.67 17 12 17Z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-          <span class="button-label">Admin Login</span>
+        <div class="hero-actions">
+          <button class="cta-button primary" (click)="openLogin()">Get Started</button>
+          <!-- <button class="cta-button secondary" (click)="goAbout()">Learn More</button> -->
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Team Section -->
-  <section class="team-section">
-    <div class="team-container">
-      <h2>Our Team</h2>
-      <div class="team-cards-container">
-        <!-- Srikar Card -->
-        <div class="team-card">
-          <div class="team-card-image">
-            <!-- <img
-              src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/799ff69626814366d8f30d0a13a522d9cf4cb8bd/Srikar_Symplr.jpg"
-              alt="Srikar"
-            /> -->
-            <img
-              src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/main/IMG-20251226-WA0086~2.jpg"
-              alt="Srikar"
-            />
-          </div>
-          <div class="team-card-overlay">
-            <div class="team-card-content">
-              <h3>Srikar P S</h3>
-              <p>Software Developer Trainee</p>
-              <!-- <span class="team-description">Expert in building robust backend systems and ensuring seamless data management for optimal library operations.</span> -->
-            </div>
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="features-container">
+      <h2>Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div
+            class="feature-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            "
+          ></div>
+          <div class="feature-content">
+            <h3>Book Management</h3>
+            <p>
+              Comprehensive catalog system with advanced search and categorization capabilities.
+            </p>
           </div>
         </div>
 
-        <!-- Kavya Card -->
-        <div class="team-card">
-          <div class="team-card-image">
-            <img
-              src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/799ff69626814366d8f30d0a13a522d9cf4cb8bd/Kavya_Symplr.jpg"
-              alt="Kavya"
-            />
-          </div>
-          <div class="team-card-overlay">
-            <div class="team-card-content">
-              <h3>Kavya Manne</h3>
-              <p>Software Developer Trainee</p>
-              <!-- <span class="team-description">Dedicated to crafting beautiful and intuitive user experiences that make library management effortless and enjoyable.</span> -->
-            </div>
+        <div class="feature-card">
+          <div
+            class="feature-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            "
+          ></div>
+          <div class="feature-content">
+            <h3>User Management</h3>
+            <p>Efficient member registration, profile management, and access control systems.</p>
           </div>
         </div>
 
-        <!-- Aman Card -->
-        <div class="team-card">
-          <div class="team-card-image">
-            <img
-              src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/799ff69626814366d8f30d0a13a522d9cf4cb8bd/Aman_Symplr.jpg"
-              alt="Aman"
-            />
-          </div>
-          <div class="team-card-overlay">
-            <div class="team-card-content">
-              <h3>Aman Maan</h3>
-              <p>Software Developer Trainee</p>
-              <!-- <span class="team-description">Passionate about creating innovative solutions and leading the technical development of our library management system.</span> -->
-            </div>
+        <div class="feature-card">
+          <div
+            class="feature-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            "
+          ></div>
+          <div class="feature-content">
+            <h3>Analytics & Reports</h3>
+            <p>Detailed insights and reporting tools for better library administration.</p>
           </div>
         </div>
+
+        <!-- <div class="feature-card">
+          <div
+            class="feature-image"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            "
+          ></div>
+          <div class="feature-content">
+            <h3>Secure Access</h3>
+            <p>Role-based authentication with secure data protection and backup systems.</p>
+          </div>
+        </div> -->
       </div>
     </div>
   </section>
 </div>
 
-<!-- Footer Section -->
-<footer class="footer-container">
+<!-- Team Section -->
+<section class="team-section">
+  <div class="team-container">
+    <h2>Our Team</h2>
+    <!-- <p class="team-subtitle">Meet the professionals behind LibraryPro</p> -->
+
+    <div class="team-grid">
+      <!-- Srikar Card -->
+      <div class="team-member">
+        <div class="member-image">
+          <img
+            src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/main/IMG-20251226-WA0086~2.jpg"
+            alt="Srikar P S"
+          />
+        </div>
+        <div class="member-info">
+          <h3>Srikar P S</h3>
+          <p class="member-role">Software Developer Trainee</p>
+          <!-- <p class="member-description">
+            Passionate developer contributing to full-stack development and innovative solutions for
+            modern web applications.
+          </p> -->
+        </div>
+      </div>
+
+      <!-- Kavya Card -->
+      <div class="team-member">
+        <div class="member-image">
+          <img
+            src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/799ff69626814366d8f30d0a13a522d9cf4cb8bd/Kavya_Symplr.jpg"
+            alt="Kavya Manne"
+          />
+        </div>
+        <div class="member-info">
+          <h3>Kavya Manne</h3>
+          <p class="member-role">Software Developer Trainee</p>
+          <!-- <p class="member-description">
+            Passionate developer contributing to full-stack development and innovative solutions for
+            modern web applications.
+          </p> -->
+        </div>
+      </div>
+
+      <!-- Aman Card -->
+      <div class="team-member">
+        <div class="member-image">
+          <img
+            src="https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/799ff69626814366d8f30d0a13a522d9cf4cb8bd/Aman_Symplr.jpg"
+            alt="Aman Maan"
+          />
+        </div>
+        <div class="member-info">
+          <h3>Aman Maan</h3>
+          <p class="member-role">Software Developer Trainee</p>
+          <!-- <p class="member-description">
+            Passionate developer contributing to full-stack development and innovative solutions for
+            modern web applications.
+          </p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<!-- <section class="faq-section">
+  <div class="faq-container">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <h3>What is LibraryPro?</h3>
+        <p>LibraryPro is a digital library management system for managing books and users.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I get started?</h3>
+        <p>Click the Get Started button and follow the instructions.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Is it good for small libraries?</h3>
+        <p>Yes, it works for all library sizes.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Do you provide support?</h3>
+        <p>Yes, we provide technical support and help.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Is my data safe?</h3>
+        <p>Yes, we keep your data secure with backups.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can I use it on mobile?</h3>
+        <p>Yes, it works on mobile phones and tablets.</p>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<!-- Footer Section - Moved to bottom -->
+<footer class="footer-container" id="contact">
   <div class="footer-content">
-    <div class="footer-left">
-      <p>&copy; 2024 Library Management System. All rights reserved.</p>
+    <div class="footer-section">
+      <h4>LibraryPro</h4>
+      <p>Library Management System</p>
+      <p>&copy; 2026 LibraryPro. All rights reserved.</p>
     </div>
-    <div class="footer-center">
-      <p>Contact Us: maan.amanmaan@gmail.com</p>
+    <div class="footer-section">
+      <h4>Contact Information</h4>
+      <p>Email: support@librarypro.com</p>
+      <p>Phone: +91 80***77770</p>
+      <p>Address: Library Pro White Field, Bangalore</p>
     </div>
-    <div class="footer-right">
-      <p>Team: Aman, Kavya & Srikar</p>
+    <div class="footer-section">
+      <h4>Development Team</h4>
+      <p>Srikar P S - Software Developer Trainee</p>
+      <p>Kavya Manne - Software Developer Trainee</p>
+      <p>Aman Maan - Software Developer Trainee</p>
     </div>
   </div>
 </footer>

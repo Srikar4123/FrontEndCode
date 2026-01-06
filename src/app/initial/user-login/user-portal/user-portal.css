@@ -3,15 +3,19 @@
 /* Main container */
 .user-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Left sidebar */
 .sidebar {
   width: 280px;
-  background: #34495e;
+  background: white;
   color: white;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
 }
@@ -26,7 +30,8 @@
   padding: 30px 25px;
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(0, 0, 0, 0.1);
+  /* background: rgba(4, 20, 240, 0.604); */
+  background: rgb(39, 37, 37);
 }
 
 .profile-pic img {
@@ -44,24 +49,25 @@
 
 .user-info h3 {
   margin: 15px 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .user-info p {
   margin: 4px 0;
-  font-size: 13px;
+  font-size: 16px;
   opacity: 0.9;
 }
 
 .user-info .email {
-  font-size: 11px;
+  font-size: 16px;
   opacity: 0.7;
 }
 
 /* Menu section */
 .menu-section {
   padding: 25px 0;
+  background-color: white;
 }
 
 .menu-item {
@@ -70,8 +76,9 @@
   padding: 16px 25px;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 0 25px 25px 0;
+  border-radius: 0 15px 15px 0;
   margin: 2px 15px 2px 0;
+  color: black;
 }
 
 .menu-item:hover {
@@ -80,9 +87,11 @@
 }
 
 .menu-item.active {
-  background: rgba(255, 255, 255, 0.15);
-  border-left: 4px solid #fff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  /* background: rgb(155, 153, 244); */
+  background: #495255;
+  color: white;
+  border-left: 4px solid #000;
+  box-shadow: 0 2px 12px rgb(0, 0, 0);
 }
 
 .menu-icon {
@@ -91,17 +100,22 @@
   width: 24px;
   text-align: center;
   transition: all 0.3s ease;
-  color: rgba(255, 255, 255, 0.9);
   font-weight: bold;
 }
 
 .menu-icon .material-symbols-outlined {
   font-size: 22px;
-  color: rgba(255, 255, 255, 0.9);
+  color: black;
 }
 
+/* .menu-icon.active {
+  font-size: 22px;
+  color: white;
+} */
+
 .menu-item:hover .menu-icon {
-  transform: scale(1.1);
+  transform: scale(1.15);
+  box-shadow: 2px solid white;
 }
 
 .menu-text {
@@ -184,6 +198,7 @@
   flex: 1;
   background: #f8f9fa;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
 }
 
 .main-area.sidebar-closed {
@@ -300,20 +315,20 @@
 .home-icon-btn {
   background: white;
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 8px;
   cursor: pointer;
-  color: #495057;
+  color: rgb(10, 3, 3);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .home-icon-btn:hover {
-  background: #495057;
+  background: #343a40;
   color: white;
   transform: translateY(-2px);
 }
@@ -321,7 +336,7 @@
 /* Content area */
 .content {
   padding: 30px;
-  min-height: calc(100vh - 100px);
+  /* min-height: calc(100vh - 100px); */
 }
 
 .page {
@@ -484,4 +499,38 @@
   .dashboard-card .card-icon {
     font-size: 36px;
   }
+}
+
+.user-info .role {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  color: white;
+  font-weight: 600;
+}
+
+.user-info .role-icon {
+  font-size: 16px;
+  font-weight: 500;
+  /* small (i) icon */
+  color: white;
+  /* subtle gray */
+  transform: translateY(1px);
+  /* tiny vertical alignment fix */
+}
+
+.user-info .email-icon {
+  transform: translateY(5px);
+  font-weight: 700;
+  font-size: 16px;
+  color: #93c5fd;
+}
+
+.user-info .phone-icon {
+  transform: translateY(5px);
+  font-weight: 700;
+  font-size: 16px;
+  color: #a7f3d0;
 }
