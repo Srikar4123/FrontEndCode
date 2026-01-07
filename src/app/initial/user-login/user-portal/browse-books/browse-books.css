@@ -46,7 +46,30 @@
 
 }
 
+.filter-panel label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--secondary);
+}
+
+.filter-panel select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
 /* ================= SEARCH ================= */
+
 
 .search-input {
 
@@ -242,18 +265,42 @@ button:disabled {
 
 /* ================= FILTER ================= */
 
+/* Space after Year filter (pushes it slightly left) */
+.year-filter {
+    margin-right: 8px;
+}
+
+/* ================= FILTER (USER PAGE – WORKING) ================= */
+
+.filter-pop {
+    position: relative;
+}
+
 .filter-pop summary {
-
     cursor: pointer;
-
     padding: 6px 8px;
-
     border: 1px solid #ddd;
-
     border-radius: 6px;
-
     background: #fff;
+    display: inline-flex;
+    align-items: center;
+}
 
+/* Dropdown box */
+.filter-pop[open] .filter-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 50;
+
+    min-width: 240px;
 }
 
 /* ================= RESPONSIVE ================= */

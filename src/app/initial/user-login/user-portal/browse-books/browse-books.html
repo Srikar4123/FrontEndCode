@@ -4,8 +4,30 @@
     <h3 class="mb-title">Browse Books</h3>
 
     <div class="mb-actions">
+      <details class="filter-pop year-filter" #yearFilter>
+        <summary>
+          <span>Year {{ selectedYearRange }}</span>
+        </summary>
+
+        <div class="filter-panel">
+          <label>Published Year</label>
+
+          <select [value]="selectedYearRange" (change)="onYearChange($event)">
+            <option *ngFor="let y of yearRanges" [value]="y.value">
+              {{ y.label }}
+            </option>
+          </select>
+
+          <div class="filter-actions">
+            <button class="primary" type="button" (click)="applyYearFilter(); closeYearFilter()">
+              Apply
+            </button>
+          </div>
+        </div>
+      </details>
+
       <!-- Genre Filter -->
-      <details class="filter-pop">
+      <details class="filter-pop" #genreFilter>
         <summary>
           <span>Genre {{ genre }}</span>
         </summary>

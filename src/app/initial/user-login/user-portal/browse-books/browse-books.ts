@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
@@ -36,6 +36,17 @@ export class BrowseBooksComponent implements OnInit {
 
   genre = 'All';
   selectedGenre = 'All';
+
+  yearRanges = [
+    { label: 'All', value: 'all' },
+    { label: 'Before 2000', value: 'before-2000' },
+    { label: '2000 – 2009', value: '2000-2009' },
+    { label: '2010 – 2019', value: '2010-2019' },
+    { label: '2020 – Present', value: '2020-present' },
+  ];
+
+  selectedYearRange: string = 'all';
+
   genres: string[] = ['All'];
 
   // genresPreset: string[] = [
@@ -55,6 +66,9 @@ export class BrowseBooksComponent implements OnInit {
   userId!: number;
 
   loading = false;
+
+  @ViewChild('yearFilter') yearFilter?: ElementRef<HTMLDetailsElement>;
+  @ViewChild('genreFilter') genreFilter?: ElementRef<HTMLDetailsElement>;
 
   constructor(
     private booksService: BooksService,
@@ -82,6 +96,25 @@ export class BrowseBooksComponent implements OnInit {
     });
 
     this.genres = ['All', ...Array.from(set).sort()];
+  }
+
+  matchesYear(year: number | string | null): boolean {
+    if (!year || this.selectedYearRange === 'all') return true;
+
+    const y = Number(year);
+
+    switch (this.selectedYearRange) {
+      case 'before-2000':
+        return y < 2000;
+      case '2000-2009':
+        return y >= 2000 && y <= 2009;
+      case '2010-2019':
+        return y >= 2010 && y <= 2019;
+      case '2020-present':
+        return y >= 2020;
+      default:
+        return true;
+    }
   }
 
   ngOnInit(): void {
@@ -131,7 +164,9 @@ export class BrowseBooksComponent implements OnInit {
 
       const matchesGenre = this.genre === 'All' || b.genre === this.genre;
 
-      return matchesSearch && matchesGenre;
+      const matchesYear = this.matchesYear(b.publishedYear);
+
+      return matchesSearch && matchesGenre && matchesYear;
     });
   }
 
@@ -140,6 +175,32 @@ export class BrowseBooksComponent implements OnInit {
   //     this.loans = res ?? [];
   //   });
   // }
+
+  closeGenreFilter(): void {
+    if (this.genreFilter?.nativeElement?.open) {
+      this.genreFilter.nativeElement.open = false;
+    }
+  }
+
+  onYearChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.selectedYearRange = select.value;
+  }
+
+  applyYearFilter() {
+    this.applyFilters();
+  }
+
+  clearYearFilter() {
+    this.selectedYearRange = 'all';
+    this.applyFilters();
+  }
+
+  closeYearFilter(): void {
+    if (this.yearFilter?.nativeElement?.open) {
+      this.yearFilter.nativeElement.open = false;
+    }
+  }
 
   loadLoans() {
     this.finesService.getLoans({ userId: this.userId, onlyActive: true }).subscribe({
