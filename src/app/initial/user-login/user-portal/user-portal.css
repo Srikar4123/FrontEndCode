@@ -1,4 +1,3 @@
-/* Professional CSS for User Portal with Sober Colors */
 
 /* Main container */
 .user-container {
@@ -7,7 +6,6 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Left sidebar */
 .sidebar {
   width: 280px;
   background: white;
@@ -25,12 +23,10 @@
   overflow: hidden;
 }
 
-/* User profile section */
 .user-profile {
   padding: 30px 25px;
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  /* background: rgba(4, 20, 240, 0.604); */
   background: rgb(39, 37, 37);
 }
 
@@ -87,7 +83,6 @@
 }
 
 .menu-item.active {
-  /* background: rgb(155, 153, 244); */
   background: #495255;
   color: white;
   border-left: 4px solid #000;
@@ -107,11 +102,6 @@
   font-size: 22px;
   color: black;
 }
-
-/* .menu-icon.active {
-  font-size: 22px;
-  color: white;
-} */
 
 .menu-item:hover .menu-icon {
   transform: scale(1.15);
@@ -336,7 +326,6 @@
 /* Content area */
 .content {
   padding: 30px;
-  /* min-height: calc(100vh - 100px); */
 }
 
 .page {
@@ -514,11 +503,8 @@
 .user-info .role-icon {
   font-size: 16px;
   font-weight: 500;
-  /* small (i) icon */
   color: white;
-  /* subtle gray */
   transform: translateY(1px);
-  /* tiny vertical alignment fix */
 }
 
 .user-info .email-icon {

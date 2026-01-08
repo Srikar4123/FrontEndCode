@@ -46,26 +46,19 @@ export class UserLoginComponent implements OnInit, OnDestroy {
     {
       url: 'https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/main/Users/ABookToday.png',
       alt: 'Modern Library Interior',
-      // title: 'Welcome to Our Library',
-      // description: 'Discover thousands of books and resources',
     },
     {
       url: 'https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/main/Users/EveryPage.png',
       alt: 'Library Books',
-      // title: 'Vast Collection',
-      // description: 'From classics to modern literature',
     },
     {
       url: 'https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/main/Users/LibrariesAreWhere.png',
       alt: 'Reading Space',
-      // title: 'Peaceful Reading',
-      // description: 'Quiet spaces for focused study',
+    
     },
     {
       url: 'https://raw.githubusercontent.com/Srikar4123/LibMgmtPics/main/Users/YourFuture.png',
       alt: 'Digital Library',
-      // title: 'Digital Resources',
-      // description: 'Access books anytime, anywhere',
     },
   ];
 
@@ -75,10 +68,9 @@ export class UserLoginComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private accountsService: AccountsService
   ) {}
-  // constructor(private router: Router, private cdr: ChangeDetectorRef) {}
+
 
   ngOnInit() {
-    // Start the slideshow with 2-second intervals
     this.startSlideshow();
   }
 
@@ -92,8 +84,8 @@ export class UserLoginComponent implements OnInit, OnDestroy {
     this.slideTimeout = setTimeout(() => {
       this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
 
-      this.cdr.detectChanges(); // 🔥 FORCE UI UPDATE
-      this.startSlideshow(); // 🔁 recursive
+      this.cdr.detectChanges(); 
+      this.startSlideshow();
     }, 2000);
   }
 

@@ -1,5 +1,4 @@
 <div class="user-container">
-  <!-- ================= SIDEBAR ================= -->
   <div class="sidebar" [class.closed]="!sidebarOpen">
     <!-- User Profile -->
     <div class="user-profile">
@@ -15,13 +14,10 @@
           <span class="material-symbols-outlined info-icon phone-icon">call</span>
           {{ userPhone }}
         </p>
-
-        <!-- <p class="email">{{ userEmail }}</p> -->
         <p class="info-row">
           <span class="material-symbols-outlined info-icon email-icon">mail</span>
           {{ userEmail }}
         </p>
-        <!-- <p class="role">{{ userRole }}</p> -->
         <p class="info-row role">
           <span class="material-symbols-outlined info-icon role-icon">info</span>
           {{ userRole }}
@@ -55,15 +51,6 @@
         <span class="menu-text">Browse Books</span>
       </div>
 
-      <!-- History -->
-      <!-- <div class="menu-item" routerLink="/history" routerLinkActive="active">
-        <div class="menu-icon">
-          <span class="material-symbols-outlined">history</span>
-        </div>
-        <span class="menu-text">History</span>
-      </div>
-      <router-outlet></router-outlet> -->
-
       <div class="menu-group">
         <div
           class="menu-item"
@@ -74,23 +61,9 @@
             <span class="material-symbols-outlined">history</span>
           </div>
           <span class="menu-text">History</span>
-          <!-- <span class="dropdown-arrow">
-            {{ usersDropdownOpen ? '▼' : '▶' }}
-          </span> -->
+
         </div>
 
-        <!-- Users Dropdown -->
-        <!-- <div class="dropdown-menu" *ngIf="usersDropdownOpen">
-          <div
-            class="dropdown-item"
-            *ngFor="let subMenu of menus[1].subMenus"
-            [class.active]="selectedSubMenu === subMenu.name"
-            (click)="selectSubMenu(subMenu.name)"
-          >
-            <span class="sub-icon">•</span>
-            <span>{{ subMenu.title }}</span>
-          </div>
-        </div> -->
       </div>
 
       <!-- Logout -->
@@ -103,9 +76,7 @@
     </div>
   </div>
 
-  <!-- ================= MAIN AREA ================= -->
   <div class="main-area" [class.sidebar-closed]="!sidebarOpen">
-    <!-- Top Bar -->
     <div class="top-bar">
       <div class="left-section">
         <button class="menu-toggle" (click)="toggleSidebar()">
@@ -119,7 +90,6 @@
       </button>
     </div>
 
-    <!-- ================= CONTENT ================= -->
     <div class="content">
       <!-- Dashboard -->
       <div *ngIf="selectedMenu === 'dashboard'" class="page">

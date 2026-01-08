@@ -20,8 +20,6 @@ import { Router } from '@angular/router';
 
 import { BooksService } from '../../../../Services/Book.Services';
 import { Books, BookDto } from '../../../../Models/Books';
-
-// NEW: use your services
 import { AccountsService } from '../../../../Services/Accounts.Services';
 import { FinesService } from '../../../../Services/Fines.Services';
 import { Account, AccountRole } from '../../../../Models/Accounts';
@@ -38,7 +36,6 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
   books: Books[] = [];
   loading = false;
 
-  // Filter
   genre = 'All';
   genres: string[] = ['All'];
   searchTerm = '';
@@ -52,17 +49,6 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     { label: '2020 - Present', value: '2020 - Present' },
   ];
 
-  // genresPreset: string[] = [
-  //   'All',
-  //   'Fiction',
-  //   'Non-Fiction',
-  //   'Mystery',
-  //   'Fantasy',
-  //   'Sci-Fi',
-  //   'Biography',
-  // ];
-
-  // Create
   showCreate = false;
   createForm: FormGroup;
 
@@ -72,13 +58,10 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
 
   toastMessage: string | null = null;
 
-  // reference to the filter popover in HTML:
+  // reference to the filter popover in HTML
   @ViewChild('filterDetails') filterDetails?: ElementRef;
   @ViewChild('yearFilter') yearFilter?: ElementRef;
 
-  // =========================
-  // NEW: Issue modal state
-  // =========================
   issueModalOpen = false;
   selectedBook: Books | null = null;
   userSearchTerm = '';
@@ -86,8 +69,7 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
   selectedUserId: number | null = null;
   issuing = false;
   issueError: string | null = null;
-  defaultLoanDays = 7; // due date = today + 14 days by default
-  // ⚠️ Replace with real admin id from your auth/session
+  defaultLoanDays = 7; 
   currentAdminId = 1;
 
   constructor(
@@ -195,7 +177,7 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     return avail > total ? { copiesRange: true } : null;
   }
 
-  /** Load all books, optionally filtered by genre */
+  /** Load all books , based on genre and year  */
   load(): void {
     this.loading = true;
     const filter = this.genre && this.genre !== 'All' ? this.genre.trim() : undefined;
@@ -285,7 +267,6 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /** Add book (POST) — optimistic UI */
   submitCreate(): void {
     if (this.createForm.invalid) {
       this.createForm.markAllAsTouched();
@@ -349,7 +330,6 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     this.editingForm = null;
   }
 
-  /** Save inline edit (PUT) — optimistic update */
   saveEdit(bookId: number): void {
     if (!this.editingForm) return;
     if (this.editingForm.invalid) {
@@ -378,7 +358,6 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     });
   }
 
-  /** Delete a book (DELETE) — optimistic */
   delete(book: Books): void {
     if (!confirm(`Delete "${book.title}"? This cannot be undone.`)) return;
     this.booksService.delete(book.id).subscribe({
@@ -390,16 +369,13 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     });
   }
 
-  /** Image fallback */
+
   onImgError(evt: Event) {
     const img = evt.target as HTMLImageElement;
     img.onerror = null;
     img.src = 'https://via.placeholder.com/220x330?text=No+Image';
   }
 
-  // ==============================================
-  // NEW: Click card -> open issue modal
-  // ==============================================
 
   openIssueModal(book: Books): void {
     this.selectedBook = book;
@@ -424,8 +400,6 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
   onEsc(): void {
     if (this.issueModalOpen) this.closeIssueModal();
   }
-
-  // Search users using AccountsService (role filter + search term)
   onUserSearchInput(term: string): void {
     this.userSearchTerm = term;
     this.issueError = null;
@@ -457,8 +431,7 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     this.issuing = true;
 
     const dto: AdminIssueDto = {
-      adminId: this.currentAdminId, // 👈 THIS is what proves admin identity
-
+      adminId: this.currentAdminId, 
       userId: this.selectedUserId!,
 
       bookId: this.selectedBook!.id,
@@ -488,7 +461,6 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Optional: still available if you want to navigate elsewhere
   openDetail(book: Books): void {
     this.router.navigate(['/books', book.id]);
   }

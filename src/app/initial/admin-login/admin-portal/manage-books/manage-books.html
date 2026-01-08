@@ -2,13 +2,6 @@
   <!-- Top toolbar -->
   <div class="mb-toolbar">
     <h3 class="mb-title">Manage Books</h3>
-    <!-- <input
-    type="text"
-    class="search-input"
-    placeholder="Search books..."
-    [(ngModel)]="searchTerm"
-    (input)="applySearch()"
-  /> -->
 
     <div class="search-wrapper">
       <span class="material-symbols-outlined search-icon">search</span>
@@ -22,9 +15,7 @@
     </div>
 
     <div class="mb-actions">
-      <!-- Filter popover -->
-      <!-- Filter popover -->
-      <!-- ================= YEAR FILTER ================= -->
+      <!--  YEAR FILTER  -->
       <details class="filter-pop" #yearFilter>
         <summary>
           <span>Year {{ selectedYearRange }}</span>
@@ -51,7 +42,6 @@
         <div class="filter-panel">
           <label for="genre">Genre</label>
           <select id="genre" [value]="genre" (change)="onGenreChange($event)">
-            <!-- <option *ngFor="let g of genresPreset" [value]="g">{{ g }}</option> -->
             <option *ngFor="let g of genres" [value]="g">{{ g }}</option>
           </select>
           <div class="filter-actions">
@@ -209,7 +199,6 @@
 
         <!-- Row actions -->
         <div class="row-actions">
-          <!-- Stop click bubbling to avoid opening modal when editing/deleting -->
           <button class="primary" type="button" (click)="$event.stopPropagation(); startEdit(b)">
             Edit
           </button>
@@ -268,86 +257,6 @@
           </form>
         </div>
       </article>
-      <!-- issueee -->
-      <!-- Issue modal -->
-      <!-- <div
-        class="modal-overlay"
-        *ngIf="issueModalOpen"
-        (click)="closeIssueModal()"
-        aria-modal="true"
-        role="dialog"
-      >
-        <div class="modal" (click)="$event.stopPropagation()">
-          <header class="modal-header">
-            <div class="modal-title">
-              Issue: {{ selectedBook?.title }}
-              <span class="muted"
-                >({{ selectedBook?.availableCopies }} /
-                {{ selectedBook?.totalCopies }} available)</span
-              >
-            </div>
-            <button class="muted close-btn" type="button" (click)="closeIssueModal()">✕</button>
-          </header>
- 
-          <section class="modal-body">
-            <!-- Search + Issue row -->
-      <!-- <div class="issue-row">
-              <input
-                #searchBox
-                type="text"
-                class="search-input"
-                placeholder="Search users by name/email/phone…"
-                [value]="userSearchTerm"
-                (input)="onUserSearchInput(searchBox.value)"
-              /> -->
-
-      <!-- <button
-                class="primary"
-                type="button"
-                [disabled]="!selectedUserId || issuing || (selectedBook?.availableCopies ?? 0) <= 0"
-                (click)="issueSelectedBook()"
-                title="Issue book to selected user"
-              >
-                {{ issuing ? 'Issuing…' : 'Issue Book' }}
-              </button>
-            </div> -->
-
-      <!-- Users list -->
-      <!-- <div class="users-list" *ngIf="(users?.length ?? 0) > 0; else noUsers">
-              <button
-                type="button"
-                class="user-item"
-                *ngFor="let u of users"
-                [class.selected]="selectedUserId === u.id"
-                (click)="selectUser(u)"
-                title="Select user"
-              >
-                <div class="user-main">
-                  <span class="user-name">{{ u.userName }}</span>
-                  <span class="user-email muted">{{ u.email }}</span>
-                </div>
-                <div class="user-meta muted">{{ u.phoneNumber }}</div>
-              </button>
-            </div>
-            <ng-template #noUsers>
-              <p class="muted small">Type at least 2 characters to search users.</p>
-            </ng-template> -->
-
-      <!-- Error -->
-      <!-- <p class="error" *ngIf="issueError">{{ issueError }}</p> -->
-
-      <!-- Info -->
-      <!-- <p class="muted small">
-              * Issue date is now; due date is in {{ defaultLoanDays }} days. (Configured in
-              component)
-            </p>
-          </section> -->
-
-      <!-- <footer class="modal-footer">
-            <button class="muted" type="button" (click)="closeIssueModal()">Cancel</button>
-          </footer>
-        </div> -->
-      <!-- </div> -->
     </ng-container>
 
     <ng-template #noBooks>
@@ -358,9 +267,7 @@
     </ng-template>
   </div>
 
-  <!-- ========================= -->
-  <!-- NEW: Issue modal (center) -->
-  <!-- ========================= -->
+<!-- Issue Model -->
   <div
     class="modal-overlay"
     *ngIf="issueModalOpen"
@@ -380,7 +287,6 @@
       </header>
 
       <section class="modal-body">
-        <!-- Search + Issue row -->
         <div class="issue-row">
           <input
             #searchBox

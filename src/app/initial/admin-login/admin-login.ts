@@ -78,8 +78,8 @@ export class AdminLogin implements OnInit, OnDestroy {
     this.slideTimeout = setTimeout(() => {
       this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
 
-      this.cdr.detectChanges(); // 🔥 FORCE UI UPDATE
-      this.startSlideshow(); // 🔁 recursive
+      this.cdr.detectChanges(); 
+      this.startSlideshow(); 
     }, 2000);
   }
 
@@ -144,7 +144,7 @@ export class AdminLogin implements OnInit, OnDestroy {
   }
 
   login() {
-    console.log('LOGIN CALLED'); // 🧪 Debug – you should see this
+    console.log('LOGIN CALLED'); 
 
     this.clearMessages();
 

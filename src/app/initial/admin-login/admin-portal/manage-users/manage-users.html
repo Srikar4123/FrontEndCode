@@ -4,7 +4,6 @@
       Role:
       <select [(ngModel)]="roleFilter">
         <option value="">(All)</option>
-        <!-- You can use enum or numeric; keeping numeric to match your code -->
         <option [ngValue]="0">User</option>
         <option [ngValue]="1">Admin</option>
       </select>
@@ -111,7 +110,7 @@
             </ng-template>
           </td>
 
-          <!-- createdAt might be string or Date; guard with safe pipe -->
+          
           <td>
             <ng-container *ngIf="acc.createdAt as created">
               {{ created | date : 'yyyy-MM-dd HH:mm' }}

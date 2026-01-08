@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowseBooksComponent } from './browse-books/browse-books';
 import { HistoryComponent } from './history/history';
-// import { HistoryComponent } from './history/history';
 
 @Component({
   selector: 'app-user-portal',
@@ -30,8 +29,6 @@ export class UserPortal implements OnInit {
   userEmail = '';
   userPhone = '';
   userRole = '';
-
-  // Simple menu list with dropdowns
   menus = [
     {
       name: 'browse-books',
@@ -48,7 +45,6 @@ export class UserPortal implements OnInit {
 
       if (!storedAccount) {
         this.router.navigate(['/user-login']);
-
         return;
       }
 
@@ -59,7 +55,6 @@ export class UserPortal implements OnInit {
       this.userEmail = account.email;
 
       this.userPhone = account.phoneNumber ?? '';
-      // this.userRole = account.role;
       this.userRole = account.role === 1 ? 'Admin' : 'User';
     }
   }
@@ -71,14 +66,10 @@ export class UserPortal implements OnInit {
 
   // Simple function to toggle dropdowns
   toggleBooksDropdown() {
-    // this.booksDropdownOpen = !this.booksDropdownOpen;
-    // this.accountDropdownOpen = false; // Close other dropdown
     this.selectedMenu = 'browse-books';
   }
 
   toggleHistory() {
-    // this.accountDropdownOpen = !this.accountDropdownOpen;
-    // this.booksDropdownOpen = false; // Close other dropdown
     this.selectedMenu = 'history';
   }
 
@@ -90,19 +81,16 @@ export class UserPortal implements OnInit {
   // Simple function to toggle sidebar
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
-    // Close dropdowns when sidebar closes
     if (!this.sidebarOpen) {
       this.booksDropdownOpen = false;
       this.accountDropdownOpen = false;
     }
   }
 
-  // Simple function to go home
   goHome() {
     this.router.navigate(['/']);
   }
 
-  // Simple function to logout
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('account');
@@ -137,7 +125,6 @@ export class UserPortal implements OnInit {
   doSearch() {
     if (this.searchText.trim()) {
       console.log('User searching for:', this.searchText);
-      // TODO: Add real search logic here
     }
   }
 
@@ -149,6 +136,5 @@ export class UserPortal implements OnInit {
   // Toggle search functionality
   toggleSearch() {
     console.log('Search clicked');
-    // TODO: Add search modal or functionality
   }
 }

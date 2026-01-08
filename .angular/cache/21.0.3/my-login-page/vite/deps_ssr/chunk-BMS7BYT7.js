@@ -3,7 +3,7 @@ import {
   PlatformLocation,
   XhrFactory,
   parseCookieValue
-} from "./chunk-WGULFMIQ.js";
+} from "./chunk-QU7IAQUL.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
@@ -2459,4 +2459,4 @@ export {
   HTTP_TRANSFER_CACHE_ORIGIN_MAP,
   withHttpTransferCache
 };
-//# sourceMappingURL=chunk-KLI5RD62.js.map
+//# sourceMappingURL=chunk-BMS7BYT7.js.map

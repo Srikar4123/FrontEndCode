@@ -48,23 +48,8 @@ export class BrowseBooksComponent implements OnInit {
   selectedYearRange: string = 'all';
 
   genres: string[] = ['All'];
-
-  // genresPreset: string[] = [
-  //   'All',
-  //   'Fiction',
-  //   'Non-Fiction',
-  //   'Mystery',
-  //   'Fantasy',
-  //   'Sci-Fi',
-  //   'Biography',
-  //   'Technology',
-  //   'Computer Science',
-  // ];
-
   search = '';
-
   userId!: number;
-
   loading = false;
 
   @ViewChild('yearFilter') yearFilter?: ElementRef<HTMLDetailsElement>;
@@ -77,14 +62,6 @@ export class BrowseBooksComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
-
-  // ngOnInit(): void {
-  //   const raw = localStorage.getItem('account');
-  //   if (!raw) return;
-  //   this.userId = JSON.parse(raw).id;
-  //   this.loadLoans();
-  //   this.loadBooks();
-  // }
 
   private buildGenres(): void {
     const set = new Set<string>();
@@ -119,32 +96,25 @@ export class BrowseBooksComponent implements OnInit {
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
-      return; // 👈 SSR: do nothing
+      return; 
     }
     const raw = localStorage.getItem('account');
     if (raw) {
       this.userId = JSON.parse(raw).id;
       this.loadLoans();
     }
-    this.loadBooks(); // ALWAYS run for initial render
+    this.loadBooks();
   }
 
-  //  loadBooks()
-  //  { this.booksService.getAll(this.genre).subscribe
-  //   ({ next: (res) => { this.books = res ?? []; this.filteredBooks = [...this.books]; },
-  //   error: (err) => { console.error(err);
-  //     this.books = []; this.filteredBooks = []; } }); }
 
   loadBooks() {
-    this.loading = true; // start loading
-
-    // Fetch ALL; apply genre locally
+    this.loading = true; 
     this.booksService.getAll(undefined).subscribe({
       next: (res) => {
         this.books = res ?? [];
         this.buildGenres();
-        this.applyFilters(); // populate filteredBooks immediately
-        this.loading = false; // stop loading
+        this.applyFilters(); 
+        this.loading = false; 
       },
       error: (err) => {
         console.error(err);
@@ -169,12 +139,6 @@ export class BrowseBooksComponent implements OnInit {
       return matchesSearch && matchesGenre && matchesYear;
     });
   }
-
-  // loadLoans() {
-  //   this.finesService.getLoans({ userId: this.userId, onlyActive: true }).subscribe((res) => {
-  //     this.loans = res ?? [];
-  //   });
-  // }
 
   closeGenreFilter(): void {
     if (this.genreFilter?.nativeElement?.open) {
@@ -211,13 +175,6 @@ export class BrowseBooksComponent implements OnInit {
     });
   }
 
-  // applySearch() {
-  //   const q = this.search.trim().toLowerCase();
-
-  //   this.filteredBooks = this.books.filter(
-  //     (b) => !q || b.title?.toLowerCase().includes(q) || b.author?.toLowerCase().includes(q)
-  //   );
-  // }
 
   applySearch() {
     this.applyFilters();
@@ -228,7 +185,7 @@ export class BrowseBooksComponent implements OnInit {
     return this.loans.filter((l) => l.userId === this.userId && !l.returnDate).length;
   }
 
-  // can the user borrow more?
+  // can the user borrow more
   canBorrowMore(): boolean {
     return this.activeLoanCount < 2;
   }
@@ -263,13 +220,13 @@ export class BrowseBooksComponent implements OnInit {
       next: (res) => {
         alert('Book borrowed successfully.');
 
-        // ✅ 1. Optimistically update books availability
+        // updating book availability
         const book = this.books.find((b) => b.id === dto.bookId);
         if (book) {
           book.availableCopies -= 1;
         }
 
-        // ✅ 2. Optimistically add loan
+        // adding the loan 
         this.loans = [
           ...this.loans,
           {
@@ -284,7 +241,6 @@ export class BrowseBooksComponent implements OnInit {
           },
         ];
 
-        // ✅ 3. Trigger UI refresh
         this.filteredBooks = [...this.books];
 
         this.cdr.detectChanges();
@@ -304,19 +260,15 @@ export class BrowseBooksComponent implements OnInit {
     this.finesService.returnLoan(dto).subscribe({
       next: () => {
         alert('Book returned successfully.');
-
-        // ✅ 1. Update loan locally
         this.loans = this.loans.map((l) =>
           l.id === loan.id ? { ...l, returnDate: new Date().toISOString() } : l
         );
 
-        // ✅ 2. Increase availability
         const book = this.books.find((b) => b.id === loan.bookId);
         if (book) {
           book.availableCopies += 1;
         }
 
-        // ✅ 3. Refresh UI
         this.filteredBooks = [...this.books];
 
         this.cdr.detectChanges();
@@ -326,36 +278,19 @@ export class BrowseBooksComponent implements OnInit {
     });
   }
 
-  // onGenreChange(event: Event) {
-  //   const value = (event.target as HTMLSelectElement).value;
-  //   this.genre = value;
-  // }
-
   onGenreChange(event: Event) {
     this.selectedGenre = (event.target as HTMLSelectElement).value;
-    // this.applyFilters(); // 👈 single click works
   }
 
   applyFilter() {
     this.genre = this.selectedGenre;
-    //this.loadBooks();
     this.applyFilters();
   }
-
-  //   applyFilter() {
-  //   this.applyFilters();
-  // }
-
-  // clearFilter() {
-  //   this.genre = 'All';
-  //   this.loadBooks();
-  // }
 
   clearFilter() {
     this.selectedGenre = 'All';
     this.genre = 'All';
     this.search = '';
-    // this.loadBooks();
     this.applyFilters();
   }
 
@@ -363,9 +298,4 @@ export class BrowseBooksComponent implements OnInit {
     return item.id;
   }
 
-  //   ensureBooksLoaded() {
-  //   if (this.books.length === 0) {
-  //     this.loadBooks();
-  //   }
-  // }
 }

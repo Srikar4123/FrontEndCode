@@ -15,8 +15,8 @@ export const routes: Routes = [
   { path: 'manage-books', component: ManageBooksComponent },
   { path: 'history', component: HistoryComponent },
   { path: 'manage-users', component: ManageUsersComponent },
-  { path: 'admin/users/:id/loans', component: UserLoansComponent }, // target route
-  { path: '', redirectTo: 'admin/manage-users', pathMatch: 'full' },
+  { path: 'admin/users/:id/loans', component: UserLoansComponent }, 
+  { path: '', redirectTo: 'admin/manage-users', pathMatch: 'full' }, 
   { path: 'reports', component: ReportsComponent },
   { path: 'admin-login', component: AdminLogin },
   { path: 'user-login', component: UserLoginComponent },
