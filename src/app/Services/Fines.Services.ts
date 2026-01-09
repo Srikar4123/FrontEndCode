@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs'; // ✅ CHANGED: add throwError
-import { catchError } from 'rxjs/operators'; // ✅ CHANGED: add catchError
+import { Observable, throwError } from 'rxjs'; 
+import { catchError } from 'rxjs/operators'; 
 import { API_BASE_URL } from '../api.config';
 import {
   FineLoan,
@@ -16,18 +16,13 @@ import {
   providedIn: 'root',
 })
 export class FinesService {
-  /**
-   * If API_BASE_URL already includes '/api' (e.g., https://localhost:5001/api),
-   * keep this as '/fines'. Otherwise change to `${API_BASE_URL}/api/fines`.
-   */
-  private readonly baseUrl = `${API_BASE_URL}/fines`; // ✅ keep or switch per your API_BASE_URL
+  private readonly baseUrl = `${API_BASE_URL}/fines`; 
 
   constructor(private readonly http: HttpClient) {}
 
-  /* =====================================================
-     ADMIN: Issue Book
+  /*
      POST /api/fines/admin/issue
-  ====================================================== */
+   */
   adminIssue(dto: AdminIssueDto): Observable<{
     message: string;
     loanId: number;
@@ -40,18 +35,16 @@ export class FinesService {
         availableCopies: number;
       }>(`${this.baseUrl}/admin/issue`, dto)
       .pipe(
-        // ✅ CHANGED: add .pipe(catchError(...))
         catchError((err) => {
-          const msg = err?.error?.message ?? 'Issue failed'; // ✅ CHANGED: surface backend message
+          const msg = err?.error?.message ?? 'Issue failed'; 
           return throwError(() => new Error(msg));
         })
       );
   }
 
-  /* =====================================================
-     USER: Borrow Book
+  /* 
      POST /api/fines/borrow
-  ====================================================== */
+  */
   borrow(dto: BorrowDto): Observable<{
     message: string;
     loanId: number;
@@ -64,18 +57,16 @@ export class FinesService {
         availableCopies: number;
       }>(`${this.baseUrl}/borrow`, dto)
       .pipe(
-        // ✅ CHANGED: add .pipe(catchError(...))
         catchError((err) => {
-          const msg = err?.error?.message ?? 'Borrow failed'; // ✅ CHANGED: surface backend message
+          const msg = err?.error?.message ?? 'Borrow failed'; 
           return throwError(() => new Error(msg));
         })
       );
   }
 
-  /* =====================================================
-     USER: Return Book
+  /* 
      POST /api/fines/return
-  ====================================================== */
+   */
   returnLoan(dto: ReturnDto): Observable<{
     message: string;
     fineAmount: number;
@@ -88,18 +79,16 @@ export class FinesService {
         availableCopies: number;
       }>(`${this.baseUrl}/return`, dto)
       .pipe(
-        // ✅ CHANGED: add .pipe(catchError(...))
         catchError((err) => {
-          const msg = err?.error?.message ?? 'Return failed'; // ✅ CHANGED: surface backend message
+          const msg = err?.error?.message ?? 'Return failed'; 
           return throwError(() => new Error(msg));
         })
       );
   }
 
-  /* =====================================================
-     USER: Pay Fine
+  /*
      POST /api/fines/pay
-  ====================================================== */
+   */
   payFine(dto: PayFineDto): Observable<{
     message: string;
     loanId: number;
@@ -114,20 +103,16 @@ export class FinesService {
         paymentStatus: boolean;
       }>(`${this.baseUrl}/pay`, dto)
       .pipe(
-        // ✅ CHANGED: add .pipe(catchError(...))
         catchError((err) => {
-          const msg = err?.error?.message ?? 'Payment failed'; // ✅ CHANGED: surface backend message
+          const msg = err?.error?.message ?? 'Payment failed'; 
           return throwError(() => new Error(msg));
         })
       );
   }
 
-  /* =====================================================
-     VIEW LOANS / FINES (Admin + User)
+  /* 
      GET /api/fines/loans
-     Supports filters:
-     userId, bookId, onlyActive, onlyUnpaid, onlyOverdue
-  ====================================================== */
+  */
   getLoans(params: {
     userId?: number;
     onlyActive?: boolean;
@@ -139,18 +124,16 @@ export class FinesService {
       if (v !== undefined && v !== null) httpParams = httpParams.set(k, String(v));
     });
     return this.http.get<LoanDto[]>(`${this.baseUrl}/loans`, { params: httpParams }).pipe(
-      // ✅ CHANGED
       catchError((err) => {
-        const msg = err?.error?.message ?? 'Failed to load loans'; // ✅ CHANGED
+        const msg = err?.error?.message ?? 'Failed to load loans'; 
         return throwError(() => new Error(msg));
       })
     );
   }
 
-  /* =====================================================
-     USER: Active Loan Count
+  /* 
      GET /api/fines/user/{userId}/activeCount
-  ====================================================== */
+   */
   getActiveCount(userId: number): Observable<{
     userId: number;
     activeLoans: number;
@@ -163,18 +146,16 @@ export class FinesService {
         canBorrow: boolean;
       }>(`${this.baseUrl}/user/${userId}/activeCount`)
       .pipe(
-        // ✅ CHANGED
         catchError((err) => {
-          const msg = err?.error?.message ?? 'Failed to get active count'; // ✅ CHANGED
+          const msg = err?.error?.message ?? 'Failed to get active count'; 
           return throwError(() => new Error(msg));
         })
       );
   }
 
-  /* =====================================================
-     USER: Total Outstanding Fine
+  /* 
      GET /api/fines/user/{userId}/outstanding
-  ====================================================== */
+   */
   getOutstanding(userId: number): Observable<{
     userId: number;
     totalOutstanding: number;
@@ -185,9 +166,8 @@ export class FinesService {
         totalOutstanding: number;
       }>(`${this.baseUrl}/user/${userId}/outstanding`)
       .pipe(
-        // ✅ CHANGED
         catchError((err) => {
-          const msg = err?.error?.message ?? 'Failed to get outstanding total'; // ✅ CHANGED
+          const msg = err?.error?.message ?? 'Failed to get outstanding total'; 
           return throwError(() => new Error(msg));
         })
       );

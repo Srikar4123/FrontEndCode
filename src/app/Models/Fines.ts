@@ -4,9 +4,9 @@ export interface FineLoan {
   userName: string;
   bookId: number;
   title: string | null;
-  issueDate: string; // ISO string
-  dueDate: string; // ISO string
-  returnDate: string | null; // ISO or null
+  issueDate: string; 
+  dueDate: string; 
+  returnDate: string | null; 
   fineAmount: number;
   paymentStatus: boolean;
 }
@@ -42,11 +42,11 @@ export interface LoanDto {
   id: number;
   userId: number;
   userName?: string;
-  bookId: number; // <-- will display exactly as in Fines.BookId
-  title?: string; // optional, from Books
-  issueDate: string; // ISO string
+  bookId: number; 
+  title?: string; 
+  issueDate: string; 
   dueDate: string;
   returnDate?: string | null;
   fineAmount: number;
-  paymentStatus: boolean; // true=Paid, false=Unpaid
+  paymentStatus: boolean; 
 }
