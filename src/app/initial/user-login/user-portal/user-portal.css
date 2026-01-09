@@ -214,13 +214,13 @@
 }
 
 .menu-toggle {
-  /* background: #495057; */
   border: none;
   width: 45px;
   height: 45px;
   border-radius: 8px;
+  background: white;
   cursor: pointer;
-  color: #495057;
+  color: black;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -229,7 +229,8 @@
 }
 
 .menu-toggle:hover {
-  background: white;
+  background: black;
+  color: white;
   transform: translateY(-2px);
 }
 

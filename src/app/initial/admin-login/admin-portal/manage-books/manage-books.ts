@@ -5,6 +5,8 @@ import {
   ViewChild,
   ElementRef,
   HostListener,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormBuilder,
@@ -31,6 +33,7 @@ import { AdminIssueDto } from '../../../../Models/Fines';
   templateUrl: './manage-books.html',
   styleUrls: ['./manage-books.css'],
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageBooksComponent implements OnInit, AfterViewInit {
   books: Books[] = [];
@@ -69,11 +72,12 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
   selectedUserId: number | null = null;
   issuing = false;
   issueError: string | null = null;
-  defaultLoanDays = 7; 
+  defaultLoanDays = 7;
   currentAdminId = 1;
 
   constructor(
     private fb: FormBuilder,
+    private readonly cdr: ChangeDetectorRef,
     private booksService: BooksService,
     private accountsService: AccountsService,
     private finesService: FinesService,
@@ -96,25 +100,27 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    const raw = localStorage.getItem('admin');
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem('admin');
 
-    if (!raw) {
-      this.issueError = 'Admin session expired. Please login again.';
+      if (!raw) {
+        this.issueError = 'Admin session expired. Please login again.';
 
-      return;
+        return;
+      }
+
+      const admin = JSON.parse(raw);
+
+      if (!admin?.accountId) {
+        this.issueError = 'Invalid admin session. Please login again.';
+
+        return;
+      }
+
+      this.currentAdminId = Number(admin.accountId);
+
+      console.log('Logged in admin:', this.currentAdminId);
     }
-
-    const admin = JSON.parse(raw);
-
-    if (!admin?.accountId) {
-      this.issueError = 'Invalid admin session. Please login again.';
-
-      return;
-    }
-
-    this.currentAdminId = Number(admin.accountId);
-
-    console.log('Logged in admin:', this.currentAdminId);
   }
 
   ngAfterViewInit(): void {
@@ -190,11 +196,13 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
           this.matchesYearRange(b.publishedYear)
         );
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.books = [];
         this.filteredBooks = [];
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -301,6 +309,9 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
           publishedYear: '',
         });
         this.books = [created, ...this.books];
+        this.filteredBooks = [...this.books];
+        this.cdr.detectChanges();
+        
         this.buildGenresFromBooks();
       },
       error: (err) => alert(err?.error?.message ?? 'Add failed'),
@@ -351,7 +362,15 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     this.booksService.update(bookId, payload).subscribe({
       next: () => {
         alert('Updated.');
-        this.books = this.books.map((b) => (b.id === bookId ? { ...b, ...payload } : b));
+        this.books = this.books.map(b =>
+          b.id === bookId ? { ...b, ...payload } : b
+        );
+
+        this.filteredBooks = [...this.books]; // IMPORTANT
+
+        this.cancelEdit();
+        this.cdr.detectChanges();
+
         this.cancelEdit();
       },
       error: (err) => alert(err?.error?.message ?? 'Update failed'),
@@ -363,7 +382,9 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     this.booksService.delete(book.id).subscribe({
       next: () => {
         alert('Deleted.');
-        this.books = this.books.filter((b) => b.id !== book.id);
+        this.books = this.books.filter(b => b.id !== book.id);
+        this.filteredBooks = [...this.books];
+        this.cdr.detectChanges();
       },
       error: (err) => alert(err?.error?.message ?? 'Delete failed'),
     });
@@ -431,7 +452,7 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
     this.issuing = true;
 
     const dto: AdminIssueDto = {
-      adminId: this.currentAdminId, 
+      adminId: this.currentAdminId,
       userId: this.selectedUserId!,
 
       bookId: this.selectedBook!.id,
@@ -445,18 +466,25 @@ export class ManageBooksComponent implements OnInit, AfterViewInit {
       next: (res) => {
         const id = this.selectedBook!.id;
 
-        this.books = this.books.map((b) =>
-          b.id === id ? { ...b, availableCopies: res.availableCopies } : b
+        this.books = this.books.map(b =>
+          b.id === id
+            ? { ...b, availableCopies: res.availableCopies }
+            : b
         );
 
-        this.selectedBook!.availableCopies = res.availableCopies;
-        alert('Book issued successfully');
+        this.selectedBook = {
+          ...this.selectedBook!,
+          availableCopies: res.availableCopies
+        };
 
+        this.cdr.detectChanges();
+        alert('Book issued successfully');
         this.closeIssueModal();
       },
 
       error: (err) => {
         this.issueError = err?.error?.message ?? 'Issue failed';
+        this.cdr.markForCheck();
       },
     });
   }

@@ -1,10 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
 import { FinesService } from '../../../../Services/Fines.Services';
-
 import { LoanDto } from '../../../../Models/Fines';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-history',
@@ -30,37 +29,45 @@ export class HistoryComponent implements OnInit {
 
   constructor(
     private finesService: FinesService,
-
+    private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // SSR guard
 
     if (typeof window === 'undefined') return;
 
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => {
+        this.initFromStorage();
+      });
+
+    this.initFromStorage();
+  }
+
+  private initFromStorage(): void {
     const stored = localStorage.getItem('account');
 
     if (!stored) {
       this.error = 'User not logged in';
-
       return;
     }
 
     const user = JSON.parse(stored);
 
     this.userId = user.id;
-
     this.userName = user.userName;
 
     if (!this.userId) {
       this.error = 'Invalid user.';
-
       return;
     }
 
     this.loadLoans();
   }
+
 
   loadLoans(): void {
     this.loading = true;
@@ -71,12 +78,10 @@ export class HistoryComponent implements OnInit {
 
     this.finesService.getLoans({ userId: this.userId }).subscribe({
       next: (data) => {
-        this.loans = data ?? [];
-
+        this.loans = [...(data ?? [])]; 
         this.loading = false;
-
-        this.cdr.detectChanges();
       },
+
 
       error: (err) => {
         this.error = err?.error?.message ?? 'Failed to load your loan details.';
